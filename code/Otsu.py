@@ -1,7 +1,8 @@
 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
-imgpath = "CatIdentifier\\asset\\dataset\\bengal\\bengal (180).jpg"
+
+imgpath = "Cat_Identifier\\asset\\dataset\\ragdol\\ragdoll (12).jpg"
 img = cv.imread(imgpath, 0)
 
 # global thresholding

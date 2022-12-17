@@ -1,17 +1,16 @@
 import cv2
 import numpy as np
-haarpath = "CatIdentifier\\asset\\haardata\\haarcascade_frontalcatface.xml"
-haarpath_ext = "CatIdentifier\\asset\\haardata\\haarcascade_frontalcatface_extended.xml"
-cat_cascade = cv2.CascadeClassifier(haarpath)
-cat_ext_cascade = cv2.CascadeClassifier(haarpath_ext)
+ccpath = '..\\Cat_Identifier\\asset\\haardata\\haarcascade_frontalcatface.xml'
+ccepath = '..\\Cat_Identifier\\asset\\haardata\\haarcascade_frontalcatface_extended.xml'
+cat_cascade = cv2.CascadeClassifier(ccpath)
+cat_ext_cascade = cv2.CascadeClassifier(ccepath)
+pathimg = '..\\Cat_Identifier\\asset\\dataset\\persian\\Persian (140).jpg'
 
-imgpath = "CatIdentifier\\asset\\dataset\\bengal\\bengal (30).jpg"
-img = cv2.imread(imgpath)
-img = img.astype("uint8")
+img = cv2.imread(pathimg, 1)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # SF 1.01 || N = 3 - 6
-faces = cat_cascade.detectMultiScale(gray, scaleFactor=1.05, minNeighbors=6)
+faces = cat_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3)
 faces_ext = cat_ext_cascade.detectMultiScale(
     gray, scaleFactor=1.01, minNeighbors=6)
 
@@ -30,12 +29,11 @@ for (x, y, w, h) in faces_ext:
     # faces = img[y:y+h, x:x+w]
     # cv2.imshow("face", faces)
     # cv2.imwrite('faces.jpg', faces)
-detpath = "CatIdentifier\\code\\faces.jpg"
+detpath = "Cat_Identifier\\code\\faces.jpg"
 
 det = cv2.imread(detpath)
 
 # APPLY OTSU THRESHOLDING
-
 
 #cv2.imwrite('detected_faces.jpg', img)
 cv2.imshow("Cat face", img)
