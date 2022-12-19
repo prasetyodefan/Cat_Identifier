@@ -51,7 +51,7 @@ def otsu_threshold(image):
 
 
 # Load the image and convert it to grayscale
-image = '..\\Cat_Identifier\\asset\\dataset\\siamese\\siamese (3).jpg'
+image = '..\\Cat_Identifier\\asset\\dataset\\bengal55\\bengal (113).jpg'
 image = cv2.imread(image, 1)
 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
