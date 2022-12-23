@@ -1,34 +1,22 @@
 import cv2
 import numpy as np
+from skimage.feature import pyramid_histogram_of_oriented_gradients
 
+pathimg = '..\\Cat_Identifier\\asset\\dataset\\bengal55\\bengal (113).jpg'
+# Load the image and convert it to grayscale
+image = cv2.imread(pathimg, 1)
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-def compute_phog(img, num_bins=9, levels=3):
-    # Compute the HOG descriptor for the image
-    hog = cv2.HOGDescriptor()
-    hog_descriptor = hog.compute(img, winStride=(8, 8), padding=(8, 8))
+# Compute the PHOG descriptor for the image
+descriptor = pyramid_histogram_of_oriented_gradients(
+    gray, orientations=8, visualize=False)
 
-    # Initialize the PHOG descriptor with the HOG descriptor
-    phog_descriptor = hog_descriptor
+# Generate the histogram of oriented gradients
+histogram = cv2.calcHist([descriptor], [0], None, [256], [0, 256])
 
-    # Compute the PHOG descriptor at each level of the pyramid
-    for level in range(1, levels):
-        # Resize the image to the next level of the pyramid
-        resized_image = cv2.resize(
-            img, None, fx=1/pow(2, level), fy=1/pow(2, level))
+# Normalize the histogram
+cv2.normalize(histogram, histogram)
 
-        # Compute the HOG descriptor for the resized image
-        hog_descriptor = hog.compute(
-            resized_image, winStride=(8, 8), padding=(8, 8))
-
-        # Concatenate the HOG descriptor to the PHOG descriptor
-        phog_descriptor = np.concatenate((phog_descriptor, hog_descriptor))
-
-    return phog_descriptor
-
-
-path = '..\\Cat_Identifier\\asset\\dataset\\bengal55\\bengal (113).jpg'
-img = cv2.imread(path, 1)
-# Perform Canny edge detection
-phogg = compute_phog(img)
-
-cv2.imshow('Edges', phogg)
+# Display the resulting histogram
+cv2.imshow("PHOG Histogram", histogram)
+cv2.waitKey(0)
