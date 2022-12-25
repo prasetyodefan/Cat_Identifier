@@ -36,7 +36,7 @@ detpath = "Cat_Identifier\\code\\faces.jpg"
 det = cv2.imread(detpath)
 
 # APPLY OTSU THRESHOLDING
-
+# TT
 #cv2.imwrite('detected_faces.jpg', img)
 cv2.imshow("Cat face", img)
 cv2.waitKey(0)
