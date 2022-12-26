@@ -56,6 +56,7 @@ def canny_edge_detection(detf, sigma=0.33):
     # Return the edges image
     return edges
 
+
 # OTSU --------------------------------------------------------------------------
 
 
