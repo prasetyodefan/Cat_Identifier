@@ -72,7 +72,8 @@ imgb = cv2.imread(pathb, 1)
 # Perform Canny edge detection
 edges = canny_edge_detection(detf)
 
-# Display the edges image
+
+# Display the result edges image
 cv2.imshow('Otsu', imgb)
 cv2.imshow('Edges', edges)
 cv2.waitKey(0)
