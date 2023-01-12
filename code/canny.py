@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+# canny
+
 
 def canny_edge_detection(image, sigma=0.2):
     """
