@@ -29,7 +29,7 @@ def otsu_threshold(image):
     optimal_variance = 0
     nbins = len(histogram)
 
-    # Loop through all possible threshold values
+    # Loop through all possible threshold value
     for i in range(nbins):
         # Compute the probability of each class
         p_0 = cdf[i] / cdf[-1]
