@@ -16,6 +16,7 @@ cat_ext_cascade = cv2.CascadeClassifier(ccepath)
 img = cv2.imread(pathimg, 1)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
+
 # SF 1.01 || N = 3 - 6
 faces = cat_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=6)
 faces_ext = cat_ext_cascade.detectMultiScale(
@@ -38,6 +39,8 @@ for (x, y, w, h) in faces_ext:
     # faces = img[y:y+h, x:x+w]
     # cv2.imshow("face", faces)
     # cv2.imwrite('faces.jpg', faces)
+
+# y
 
 
 def canny_edge_detection(detf, sigma=0.33):
