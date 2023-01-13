@@ -1,10 +1,11 @@
 import cv2
 import numpy as np
+from PIL import Image
 
-# canny
+# Open an image file
 
 
-def canny_edge_detection(image, sigma=0.2):
+def canny_edge_detection(im2arr, sigma=0.2):
     """
     Perform Canny edge detection on an image.
 
@@ -21,7 +22,7 @@ def canny_edge_detection(image, sigma=0.2):
         Output image with edges highlighted.
     """
     # Convert the image to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(im2arr, cv2.COLOR_BGR2GRAY)
 
     # Compute the median of the single channel pixel intensities
     v = np.median(gray)
@@ -39,10 +40,14 @@ def canny_edge_detection(image, sigma=0.2):
 
 pathimg = '..\\Cat_Identifier\\asset\\dataset\\bengal55\\bengal (78).jpg'
 
-image = cv2.imread(pathimg, 1)
+image = Image.open(pathimg)
+im2arr = np.array(image)  # im2arr.shape: height x width x channel
+arr2im = Image.fromarray(im2arr)
+
+#image = cv2.imread(pathimg, 1)
 
 # Perform Canny edge detection
-edges = canny_edge_detection(image)
+edges = canny_edge_detection(im2arr)
 
 # Display the edges image
 cv2.imshow('Edges', edges)
