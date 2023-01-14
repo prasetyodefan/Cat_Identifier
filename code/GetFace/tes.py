@@ -39,3 +39,4 @@ det = cv2.imread(detpath)
 #cv2.imwrite('detected_faces.jpg', img)
 cv2.imshow("Cat face", img)
 cv2.waitKey(0)
+
