@@ -53,3 +53,4 @@ edges = canny_edge_detection(im2arr)
 cv2.imshow('Edges', edges)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+

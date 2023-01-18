@@ -37,5 +37,8 @@ im = im.point(lambda x: 255 if x > threshold else 0)
 
 # Save the binary image
 im.save("..\\Cat_Identifier\\code\\Otsu\\binary_image.jpg")
+im.show("binary_image.jpg")
 
 # Work
+
+
