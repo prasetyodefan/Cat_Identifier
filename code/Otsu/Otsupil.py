@@ -36,6 +36,13 @@ for t in range(256):
 im = im.point(lambda x: 255 if x > threshold else 0)
 
 # Save the binary image
+<<<<<<< HEAD
 im.save("..\\Cat_Identifier\\code\\Otsu\\binary_im.jpg")
+=======
+im.save("..\\Cat_Identifier\\code\\Otsu\\binary_image.jpg")
+im.show("binary_image.jpg")
+>>>>>>> 6eae9094614df40a539e298681da8b00ab2d9b58
 
 # Work
+
+
