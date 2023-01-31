@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 # PATH LOCATE
 ccpath = '..\\Cat_Identifier\\asset\\haardata\\haarcascade_frontalcatface.xml'
-ccepath = '..\\Cat_Identifier\\asset\\haardata\\haarcascade_frontalcatface_extended.xml'
+ccepath = '..\\Cat_Identifier\\asset\\haardata\\haarcascade_frontalcatface_extended.xml' 
 pathimg = '..\\Cat_Identifier\\asset\\dataset\\bengal55\\bengal (113).jpg'
 
 # CAT CASCADE DETECTION
@@ -81,3 +81,4 @@ cv2.imshow('Otsu', imgb)
 cv2.imshow('Edges', edges)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+

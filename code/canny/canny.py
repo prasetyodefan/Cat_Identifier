@@ -33,7 +33,7 @@ def canny_edge_detection(im2arr, sigma=0.2):
     edges = cv2.Canny(gray, lower, upper)
 
     # Return the edges image
-    return edges
+    return edges 
 
 
 # Read in the image
