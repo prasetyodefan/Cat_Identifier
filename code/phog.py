@@ -17,6 +17,6 @@ histogram = cv2.calcHist([descriptor], [0], None, [256], [0, 256])
 # Normalize the histogram
 cv2.normalize(histogram, histogram)
 
-# Display the resulting histogram
+# Display the resulting histograms
 cv2.imshow("PHOG Histogram", histogram)
 cv2.waitKey(0)
