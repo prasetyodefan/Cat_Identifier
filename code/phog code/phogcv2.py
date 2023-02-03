@@ -1,7 +1,7 @@
 import numpy as np
-from skimage import filters, feature, data
 import matplotlib.pyplot as plt
-
+from skimage import filters, feature, data
+from PIL import Image
 
 path = "..\\Cat_Identifier\\asset\\dataset\\bengal55\\bengal (1).jpg"
 
@@ -34,13 +34,15 @@ def compute_phog(image, levels, bins):
         phog[i] = np.concatenate(histograms[i])
     return np.concatenate(phog)
 
+def convert_to_grayscale(image):
+    return image.convert('L')
+
 
 # Load an example image
-imarr = np.array(path)
-image = imarr
-
+image = Image.open(path)
+gray_image = convert_to_grayscale(image)
 # Compute the PHOG descriptor
-phog_descriptor = compute_phog(image, 3, 8)
+phog_descriptor = compute_phog(gray_image, 3, 8)
 
 print("PHOG Descriptor Shape:", phog_descriptor.shape)
 
