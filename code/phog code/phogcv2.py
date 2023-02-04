@@ -5,6 +5,18 @@ from PIL import Image
 
 path = "..\\Cat_Identifier\\asset\\dataset\\bengal55\\bengal (1).jpg"
 
+im = Image.open(path)
+
+# Convert the image to grayscale, if it is not already in grayscale.
+if im.mode != 'L':
+    im = im.convert('L')
+
+
+
+
+
+
+
 def compute_phog(image, levels, bins):
     phog = []
     histograms = []
@@ -34,15 +46,8 @@ def compute_phog(image, levels, bins):
         phog[i] = np.concatenate(histograms[i])
     return np.concatenate(phog)
 
-def convert_to_grayscale(image):
-    return image.convert('L')
-
-
-# Load an example image
-image = Image.open(path)
-gray_image = convert_to_grayscale(image)
 # Compute the PHOG descriptor
-phog_descriptor = compute_phog(gray_image, 3, 8)
+phog_descriptor = compute_phog(im, 3, 8)
 
 print("PHOG Descriptor Shape:", phog_descriptor.shape)
 
@@ -51,4 +56,5 @@ plt.figure(figsize=(5,5))
 plt.imshow(image)
 plt.axis('off')
 plt.show()
+
 
