@@ -72,7 +72,7 @@ def phog(img, bin_size=16, levels=3):
 
     # Step 4: Pyramidal representation
     #---------------------------------------------------------------------------
-    # downsampling the image using the cv2.pyrDown function and computing the histograms of 
+    # downsampling the image using the pyrDown function and computing the histograms of 
     # oriented gradients for each level. The histograms are stored in a list pyramid.
 
     pyramid = []
