@@ -1,4 +1,5 @@
-import cv2
+
+from PIL import Image
 import numpy as np
 from scipy.ndimage import convolve
 
@@ -12,6 +13,9 @@ def phog(img, bin_size=16, levels=3):
     # array represents the scaling factors for the RGB channels of the image
     def grayscale(img):
         return np.dot(img[..., :3], [0.2989, 0.5870, 0.1140])
+        
+    # Convert img to grayscale with float 32 bit DataType
+    gray = grayscale(img).astype(np.float32)
 
     # Perform a 2D convolution of an image with a kernel.
     # Parameter Usage | image
@@ -34,9 +38,7 @@ def phog(img, bin_size=16, levels=3):
                 result[i, j] = (pad[i:i+k, j:j+l] * kernel).sum()
         return result
     
-    # Convert img to grayscale with float 32 bit DataType
-    gray = grayscale(img).astype(np.float32)
-
+    
 
     # Step 2: Gradient computation
     #---------------------------------------------------------------------------
@@ -131,7 +133,10 @@ def phog(img, bin_size=16, levels=3):
     return phog_descriptor
 
 
-img = cv2.imread('Otsus.jpg')
+img = Image.open('cropfaces.jpg')
+img = np.array(img)
+#img = arrim.shape
+
 result = phog(img)
 
 print('Res PHOG', result)

@@ -2,14 +2,14 @@ import numpy as np
 from PIL import Image
 
 # Open the image
-im = Image.open('cropfaces.jpg')
+img = Image.open('cropfaces.jpg')
 
 # Convert the image to grayscale, if it is not already in grayscale.
-if im.mode != 'L':
-    im = im.convert('L')
+if img.mode != 'L':
+    img = img.convert('L')
 
 # Compute the histogram of the image
-histogram = np.histogram(im, bins=range(256))[0]
+histogram = np.histogram(img, bins=range(256))[0]
 
 # Initialize the threshold value and maximum inter-class variance
 threshold = 0
@@ -33,12 +33,12 @@ for t in range(256):
         max_inter_class_variance = inter_class_variance
 
 # Threshold the image using the optimal threshold value
-im = im.point(lambda x: 255 if x > threshold else 0)
+img = img.point(lambda x: 255 if x > threshold else 0)
 
 # Save the binary image
-im.save("..\\Cat_Identifier\\code\\Otsu\\binary_im.jpg")
-im.save("..\\Cat_Identifier\\code\\Otsu\\binary_image.jpg")
-im.show("binary_image.jpg")
+img.save("..\\Cat_Identifier\\code\\Otsu\\binary_im.jpg")
+img.save("..\\Cat_Identifier\\code\\Otsu\\binary_image.jpg")
+img.show("binary_image.jpg")
 
 # Work
 
