@@ -9,7 +9,7 @@ def otsu_threshold(image):
         histogram * np.arange(256)) / (cumulative_sum + 1e-10)
     between_class_variance = cumulative_sum[:-1] * (
         cumulative_sum[-1] - cumulative_sum[:-1]) * (cumulative_mean[:-1] - cumulative_mean[-1])**2
-    threshold = 100
+    threshold = np.argmax(between_class_variance)
     return threshold
 
 

@@ -148,7 +148,6 @@ def phog(img, bin_size=16, levels=3):
 
     return phog_descriptor
 
-
 img = Image.open('cropfaces.jpg')
 img = np.array(img)
 #img = arrim.shape
