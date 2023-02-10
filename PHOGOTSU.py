@@ -154,3 +154,4 @@ img = np.array(img)
 
 result = phog(img)
 print('Res PHOG', result)
+
