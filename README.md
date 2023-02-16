@@ -32,6 +32,11 @@ pip install -r requirements.txt
 
 ## Flowchart 
 
-![Flowproccess](https://user-images.githubusercontent.com/20703698/219379209-4724c37d-b01a-41b4-937d-0d10459064fd.png)
+<p align="center">
+  
+<img src="https://user-images.githubusercontent.com/20703698/219513644-09d8dba3-0d70-4460-b542-995ee74ae04a.png">
+  
+</p>
+
 
 
