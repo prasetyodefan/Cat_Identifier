@@ -1,4 +1,4 @@
-## Thesis Backup Cat Identifier With SVM
+# Thesis Backup Cat Identifier With SVM
 This project is a backup of the code and data used in my thesis on "Cat Identifier with Support Vector Machines (SVM)". In my thesis, I explore the use of SVMs for classifying images of cats breed. The code and data in this repository are the implementation and results of my experiments.
 
 
