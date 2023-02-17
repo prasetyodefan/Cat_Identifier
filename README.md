@@ -14,7 +14,7 @@ The repository contains the following files and directories:
 Steps to use the code in this repository
 1. Install [Python Version 3.10.0](https://www.python.org/downloads/release/python-3100/)
 2. [Clone the repository](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop) to your local machine. 
-3. Install Required Library with this code in cmd/terminal <br>
+3. Install [Required Library](https://github.com/prasetyodefan/Cat_Identifier/blob/main/requirements.txt) with this code in cmd/terminal <br>
 ```python   
 
 pip install -r requirements.txt    
