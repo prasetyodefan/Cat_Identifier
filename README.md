@@ -21,7 +21,7 @@ pip install -r requirements.txt
 
 ```
 
-## Link To Example Code
+## Example Code
 
 - Cat Face Detection
 - Crop And Resize Function
