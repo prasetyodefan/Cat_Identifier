@@ -16,6 +16,7 @@ faces_ext = cat_ext_cascade.detectMultiScale(
 
 # print(type(faces))
 # print(faces)
+
 # HAAR CAT FACE DETECTION
 for (x, y, w, h) in faces:
     # BLUE
