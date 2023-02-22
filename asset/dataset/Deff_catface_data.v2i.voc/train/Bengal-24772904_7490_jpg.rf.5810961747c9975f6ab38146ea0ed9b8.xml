@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Bengal-24772904_7490_jpg.rf.5810961747c9975f6ab38146ea0ed9b8.jpg</filename>
+	<path>Bengal-24772904_7490_jpg.rf.5810961747c9975f6ab38146ea0ed9b8.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>cat-face</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>30</xmin>
+			<xmax>378</xmax>
+			<ymin>16</ymin>
+			<ymax>342</ymax>
+		</bndbox>
+	</object>
+</annotation>
