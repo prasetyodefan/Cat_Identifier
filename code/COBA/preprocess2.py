@@ -4,7 +4,7 @@ import time
 
 img_names = []
 xml_names = []
-for dirname, dirs, filenames in os.walk('../asset/dataset/Deff_catface_data.v2i.voc/train'):
+for dirname, dirs, filenames in os.walk('../../asset/dataset/Deff_catface_data.v2i.voc/train/'):
   starttime = time.time()
   for filename in filenames:
     if filename[-3:] != "xml":
@@ -23,8 +23,8 @@ import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
 
-path_annotations = "../asset/dataset/Deff_catface_data.v2i.voc/train/"
-path_images = "../asset/dataset/Deff_catface_data.v2i.voc/train/"
+path_annotations = "../../asset/dataset/Deff_catface_data.v2i.voc/train/"
+path_images = "../../asset/dataset/Deff_catface_data.v2i.voc/train/"
 
 class_names = ['cat-face']
 images = []
@@ -71,7 +71,6 @@ preprocess = transforms.Compose([
 
 # Apply preprocess
 image_tensor = torch.stack([preprocess(image) for image in images])
-image_tensor[0].shape
 image_numpy = [image.numpy().transpose(1, 2, 0) for image in image_tensor]
 print("AA", image_numpy[0].shape)
 
@@ -226,10 +225,18 @@ def phog(img, bin_size=16, levels=3):
 
     return phog_descriptor
 
-img = Image.open('/Users/ilhamygp/project/Cat_Identifier/asset/dataset/bengal/bengal (1).jpg')
-img = np.array(img)
+img = Image.open('../../asset/dataset/bengal/bengal (1).jpg')
+img = np.array(image_numpy[0])
 #img = arrim.shape
 print('Shape', img.shape)
 
 result = phog(img)
-print('Res PHOG', result)
+
+# print('Res PHOG', result)
+
+# print('------------------------------')
+# print('IMG Tensor')
+# print(image_numpy[0])
+# print('------------------------------')
+# print('IMG numpy')
+# print(img)
