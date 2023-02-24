@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>siamese-133-_jpg.rf.4d96c0b98100f4b52505e23144653acf.jpg</filename>
+	<path>siamese-133-_jpg.rf.4d96c0b98100f4b52505e23144653acf.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>89</xmin>
+			<xmax>406</xmax>
+			<ymin>1</ymin>
+			<ymax>348</ymax>
+		</bndbox>
+	</object>
+</annotation>

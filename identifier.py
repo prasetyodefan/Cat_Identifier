@@ -170,14 +170,14 @@ for i in range(len(images)):
 from sklearn.model_selection import train_test_split
 
 X, y = features, np.array(target)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
 print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
 print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 ## Classification step 1
 
 
-# ------------------------------------------------------
+# # ------------------------------------------------------
 # from sklearn.svm import SVC
 # from sklearn.ensemble import StackingClassifier
 # from sklearn.linear_model import LogisticRegression
@@ -190,7 +190,7 @@ print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 
 # param_grid = {
 #     'svm__C': [1.6, 1.7, 1.8],
-#     'svm__kernel': ['poly'],#{'poly', 'rbf', 'sigmoid', 'precomputed', 'linear'}
+#     'svm__kernel': ['rbf'],#{'poly', 'rbf', 'sigmoid', 'precomputed', 'linear'}
 #     'final_estimator__C': [1.3, 1.4, 1.5]
 # }
 
@@ -204,14 +204,14 @@ print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 
 # print('Best parameters: %s' % grid.best_params_)
 # print('Accuracy: %.2f' % grid.best_score_)
-# ------------------------------------------------------
+# # ------------------------------------------------------
 from sklearn.svm import SVC
 from sklearn.ensemble import StackingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42))],
+    estimators=[('svm', SVC(C=1.7, kernel='rbf', random_state=42))],
     final_estimator=LogisticRegression(C=1.3, random_state=42),
     n_jobs=-1)
 
@@ -239,6 +239,25 @@ asss += ass
 cm = confusion_matrix(y_true, y_pred, labels=['bengal', 'persian', 'ragdoll', 'rblue', 'siamese'])
 
 # print confusion matrix
-print(y_pred,'|',y_true,'|')
-print(cm)
-print(asss)
+
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+
+# Plot non-normalized confusion matrix
+titles_options = [
+    ("Confusion matrix, without normalization", None),
+]
+for title, normalize in titles_options:
+    disp = ConfusionMatrixDisplay.from_estimator(
+        final_clf,
+        X_test,
+        y_test,
+        display_labels=class_names,
+        cmap=plt.cm.Blues,
+    )
+    disp.ax_.set_title(title)
+
+    print(title)
+    print(disp.confusion_matrix)
+
+plt.show()
