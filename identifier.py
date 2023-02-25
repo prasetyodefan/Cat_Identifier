@@ -132,6 +132,7 @@ def phog(img, bin_size=16, levels=3):
 
         return downsampled
 
+
     for i in range(levels):
         histograms = np.zeros((bin_size,))
         for y in range(img.shape[0]):
