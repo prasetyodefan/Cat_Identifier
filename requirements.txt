@@ -1,5 +1,8 @@
 numpy
 scipy
 pillow
+xmltodict
 matplotlib
+scikit-learn
 scikit-image
+
