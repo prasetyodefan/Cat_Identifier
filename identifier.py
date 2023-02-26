@@ -64,7 +64,7 @@ import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=258):
+def resize_image(img, size=500):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
@@ -84,7 +84,6 @@ for i in range(len(images)):
   images[i] = resize_image(images[i])
   images[i] = grayscale(images[i])
   images[i] = remove_background(images[i])
-
 
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
 from PIL import Image
@@ -171,7 +170,7 @@ for i in range(len(images)):
 from sklearn.model_selection import train_test_split
 
 X, y = features, np.array(target)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.35, random_state=42)
 
 print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
 print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
@@ -212,8 +211,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.7, kernel='rbf', random_state=42))],
-    final_estimator=LogisticRegression(C=1.3, random_state=42),
+    estimators=[('svm', SVC(C=1.7, kernel='rbf', random_state=39))],
+    final_estimator=LogisticRegression(C=1.3, random_state=39),
     n_jobs=-1)
 
 final_clf.fit(X_train, y_train)
