@@ -11,7 +11,7 @@ for dirname, subdirs, filenames in os.walk('asset/dataset/DF 5 Cat Breed/'):
     else:
       xml_names.append(filename)
 
-print("# Total files")
+print(" Total files")
 print(len(img_names), "images")
 print(len(xml_names), "xml files")
 
