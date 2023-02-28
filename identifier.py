@@ -15,7 +15,6 @@ print(" Total files")
 print(len(img_names), "images")
 print(len(xml_names), "xml files")
 
-
 ## Preprocessing step 2 - cropped images by bounding box using xml files 
 import xmltodict
 from matplotlib import pyplot as plt
