@@ -1,15 +1,15 @@
 ## Preprocessing step 1 - filtered images and xml files
 import os
 
-img_names = []
+dir_data = 'asset/dataset/test/'
+file_list = os.listdir(dir_data)
+
+img_names = 'asset/dataset/test/bengal-6-_jpg.rf.966f506dea0904fef8c84045dae9c69f.jpg'
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('asset/dataset/Deff_catface_data.v2i.voc/train/'):
-  for filename in filenames:
-    if filename[-3:] != "xml":
-      img_names.append(filename)
-    else:
-      xml_names.append(filename)
+for filename in file_list:
+    if filename[-3:] == "xml":
+        xml_names.append(filename)
 
 print(" Total files")
 print(len(img_names), "images")
@@ -20,10 +20,11 @@ import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
 
-path_annotations = "asset/dataset/Deff_catface_data.v2i.voc/train/"
-path_images = "asset/dataset/Deff_catface_data.v2i.voc/train/"
+path_annotations = "asset/dataset/test/"
+path_images = "asset/dataset/test/"
 
-class_names = ['cat-face','rblue']
+class_names = ['bengal','rblue']
+
 images = []
 target = []
 
@@ -34,23 +35,15 @@ def crop_bounding_box(img, bnd):
   _img = _img[:,:,:3]
   return _img
 
-for img_name in img_names:
-  with open(path_annotations+img_name[:-4]+".xml") as fd:
+with open(path_annotations+img_names[:-4]+".xml") as fd:
     doc = xmltodict.parse(fd.read())
 
-  img = imread(path_images+img_name)
-  temp = doc["annotation"]["object"]
-  if type(temp) == list:
-    for i in range(len(temp)):
-      if temp[i]["name"] not in class_names:
-        continue
-      images.append(crop_bounding_box(img, temp[i]["bndbox"]))
-      target.append(temp[i]["name"])
-  else:
-    if temp["name"] not in class_names:
-        continue
-    images.append(crop_bounding_box(img, temp["bndbox"]))
-    target.append(temp["name"])
+img = imread(path_images+img_names)
+temp = doc["annotation"]["object"]
+
+
+images.append(crop_bounding_box(img, temp["bndbox"]))
+target.append(temp["name"])
 
 # print total target by class
 print("# Total target by class")
@@ -79,10 +72,9 @@ def grayscale(img):
   _img = np.dot(_img[...,:3], [0.299, 0.587, 0.114])
   return _img
 
-for i in range(len(images)):
-  images[i] = resize_image(images[i])
-  images[i] = grayscale(images[i])
-  images[i] = remove_background(images[i])
+images = resize_image(images)
+images = grayscale(images)
+images = remove_background(images)
 
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
 from PIL import Image
@@ -159,10 +151,7 @@ def phog(img, bin_size=16, levels=3):
 
     return phog_descriptor
 
-features = []
-for i in range(len(images)):
-  print("Processing item", i+1, "of ",len(images),"...")
-  features.append(phog(images[i]))
+features = phog(images)
 
 # print(features[0])
 
@@ -174,36 +163,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_
 print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
 print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 ## Classification step 1
-
-
-# # ------------------------------------------------------
-# from sklearn.svm import SVC
-# from sklearn.ensemble import StackingClassifier
-# from sklearn.linear_model import LogisticRegression
-
-# clf = StackingClassifier(
-#     estimators=[('svm', SVC(random_state=42))],
-#     final_estimator=LogisticRegression(random_state=42),
-#     n_jobs=-1)
-# from sklearn.model_selection import GridSearchCV
-
-# param_grid = {
-#     'svm__C': [1.6, 1.7, 1.8],
-#     'svm__kernel': ['rbf'],#{'poly', 'rbf', 'sigmoid', 'precomputed', 'linear'}
-#     'final_estimator__C': [1.3, 1.4, 1.5]
-# }
-
-# grid = GridSearchCV(
-#     estimator=clf,
-#     param_grid=param_grid,
-#     scoring='accuracy',
-#     n_jobs=-1)
-
-# grid.fit(X_train, y_train)
-
-# print('Best parameters: %s' % grid.best_params_)
-# print('Accuracy: %.2f' % grid.best_score_)
-# # ------------------------------------------------------
 
 from sklearn.svm import SVC
 from sklearn.ensemble import StackingClassifier
@@ -224,38 +183,27 @@ print('Recall score : ', recall_score(y_test, y_pred, average='weighted'))
 print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
 
 
-# Save SVM Model
-import joblib
+# Load SVM Model
+import pickle
 
-joblib.dump(final_clf, 'svm_model.pkl')
+# Load the trained SVM model from the pickle file
+with open('svm_model.pkl', 'rb') as f:
+    svm_model = pickle.load(f)
 
+X_test_processed = features
+
+# Predict the object classes using the SVM model
+y_pred = svm_model.predict(X_test_processed)
+
+accuracy = np.mean(y_pred == y_test)
+print('Accuracy:', accuracy)
 
 # create confusion matrix
 
-from sklearn.metrics import confusion_matrix
+# Calculate the confusion matrix
+cm = confusion_matrix(X_test_processed, y_pred)
 
-cm = confusion_matrix(y_test, y_pred, labels=['bengal', 'persian', 'ragdoll', 'rblue', 'siamese'])
-
-# print confusion matrix
-
-import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
-
-# Plot non-normalized confusion matrix
-titles_options = [
-    ("Confusion matrix, without normalization", None),
-]
-for title, normalize in titles_options:
-    disp = ConfusionMatrixDisplay.from_estimator(
-        final_clf,
-        X_test,
-        y_test,
-        display_labels=class_names,
-        cmap=plt.cm.Blues,
-    )
-    disp.ax_.set_title(title)
-
-    print(title)
-    print(disp.confusion_matrix)
-
-plt.show()
+# Display the confusion matrix
+labels = ['Bengal','rblue'] # Replace with your own class labels
+display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
+display.plot()
