@@ -153,35 +153,6 @@ def phog(img, bin_size=16, levels=3):
 
 features = phog(images)
 
-# print(features[0])
-
-from sklearn.model_selection import train_test_split
-
-X, y = features, np.array(target)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
-
-print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
-print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
-## Classification step 1
-
-from sklearn.svm import SVC
-from sklearn.ensemble import StackingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
-final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.6, kernel='rbf', random_state=42))],
-    final_estimator=LogisticRegression(C=1.3, random_state=42),
-    n_jobs=-1)
-
-final_clf.fit(X_train, y_train)
-y_pred = final_clf.predict(X_test)
-
-print('Accuracy score : ', accuracy_score(y_test, y_pred))
-print('Precision score : ', precision_score(y_test, y_pred, average='weighted'))
-print('Recall score : ', recall_score(y_test, y_pred, average='weighted'))
-print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
-
 
 # Load SVM Model
 import pickle
