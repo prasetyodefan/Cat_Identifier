@@ -169,10 +169,11 @@ for i in range(len(images)):
 from sklearn.model_selection import train_test_split
 
 X, y = features, np.array(target)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=42)
 
 print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
 print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
+
 ## Classification step 1
 
 
@@ -225,10 +226,12 @@ print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
 
 
 # Save SVM Model
-import joblib
 
-joblib.dump(final_clf, 'svm_model.pkl')
+import pickle
 
+pkl_filename = 'svm_model.pkl'
+with open(pkl_filename, 'wb') as file:
+  pickle.dump(final_clf, file)
 
 # create confusion matrix
 
