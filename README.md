@@ -8,7 +8,6 @@ The repository contains the following files and directories:
 - [` Asset `](https://github.com/prasetyodefan/Cat_Identifier/tree/main/asset)  : A directory containing the dataset of cat breed images used in the experiments.
 - [` Code  ` ](https://github.com/prasetyodefan/Cat_Identifier/tree/main/code)  : A directory containing the Python code used for training the SVM and testing its performance.
 
-
 ## Usage 
 
 Steps to use the code in this repository
