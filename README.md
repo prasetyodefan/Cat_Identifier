@@ -33,8 +33,8 @@ pip install -r requirements.txt
 
 <p align="center">
   
-<img src="https://user-images.githubusercontent.com/20703698/219513644-09d8dba3-0d70-4460-b542-995ee74ae04a.png">
-  
+<img src="https://user-images.githubusercontent.com/20703698/223105125-708afb87-c83a-43e3-8fe0-06627e9d5b3e.png">
+
 </p>
 
 
