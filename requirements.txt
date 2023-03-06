@@ -1,6 +1,7 @@
 numpy
 scipy
 pillow
+pickles
 xmltodict
 matplotlib
 scikit-learn
