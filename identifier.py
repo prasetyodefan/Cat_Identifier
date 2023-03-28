@@ -4,7 +4,7 @@ import os
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('asset/dataset/Deff_catface_data.v2i.voc/train/'):
+for dirname, subdirs, filenames in os.walk('asset/dataset/DF 5 Cat Breed/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
@@ -20,10 +20,10 @@ import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
 
-path_annotations = "asset/dataset/Deff_catface_data.v2i.voc/train/"
-path_images = "asset/dataset/Deff_catface_data.v2i.voc/train/"
+path_annotations = "asset/dataset/DF 5 Cat Breed/"
+path_images = "asset/dataset/DF 5 Cat Breed/"
 
-class_names = ['cat-face','rblue']
+class_names = ['bengal','persian','siamese','ragdoll','rblue']
 images = []
 target = []
 
@@ -88,7 +88,7 @@ for i in range(len(images)):
 from PIL import Image
 from scipy.ndimage import convolve
 
-def phog(img, bin_size=16, levels=3):
+def phog(img, bin_size=32, levels=3):
     # Compute the gradient magnitude and orientation
     gx = convolve(img, [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
     gy = convolve(img, [[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
@@ -177,20 +177,25 @@ print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 ## Classification step 1
 
 
-# # ------------------------------------------------------
+# # # ------------------------------------------------------
 # from sklearn.svm import SVC
+# from sklearn.tree import DecisionTreeClassifier
 # from sklearn.ensemble import StackingClassifier
 # from sklearn.linear_model import LogisticRegression
 
 # clf = StackingClassifier(
-#     estimators=[('svm', SVC(random_state=42))],
+#     estimators=[('svm', SVC(random_state=42)),
+#                 ('tree', DecisionTreeClassifier(random_state=42))],
 #     final_estimator=LogisticRegression(random_state=42),
 #     n_jobs=-1)
+
 # from sklearn.model_selection import GridSearchCV
 
 # param_grid = {
 #     'svm__C': [1.6, 1.7, 1.8],
-#     'svm__kernel': ['rbf'],#{'poly', 'rbf', 'sigmoid', 'precomputed', 'linear'}
+#     'svm__kernel': ['rbf'],
+#     'tree__criterion': ['entropy'],
+#     'tree__max_depth': [9, 10, 11],
 #     'final_estimator__C': [1.3, 1.4, 1.5]
 # }
 
@@ -204,16 +209,18 @@ print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 
 # print('Best parameters: %s' % grid.best_params_)
 # print('Accuracy: %.2f' % grid.best_score_)
-# # ------------------------------------------------------
+# # # ------------------------------------------------------
 
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import StackingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.6, kernel='rbf', random_state=42))],
-    final_estimator=LogisticRegression(C=1.3, random_state=42),
+    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42)),
+                ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))],
+    final_estimator=LogisticRegression(C=1.5, random_state=42),
     n_jobs=-1)
 
 final_clf.fit(X_train, y_train)
