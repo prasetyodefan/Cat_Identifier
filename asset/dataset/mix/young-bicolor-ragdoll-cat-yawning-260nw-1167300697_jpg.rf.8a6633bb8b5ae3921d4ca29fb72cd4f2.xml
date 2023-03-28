@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>young-bicolor-ragdoll-cat-yawning-260nw-1167300697_jpg.rf.8a6633bb8b5ae3921d4ca29fb72cd4f2.jpg</filename>
+	<path>young-bicolor-ragdoll-cat-yawning-260nw-1167300697_jpg.rf.8a6633bb8b5ae3921d4ca29fb72cd4f2.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>390</width>
+		<height>280</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>100</xmin>
+			<xmax>209</xmax>
+			<ymin>54</ymin>
+			<ymax>173</ymax>
+		</bndbox>
+	</object>
+</annotation>

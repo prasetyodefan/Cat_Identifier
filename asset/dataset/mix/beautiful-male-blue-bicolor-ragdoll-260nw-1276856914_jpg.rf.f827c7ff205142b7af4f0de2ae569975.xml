@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>beautiful-male-blue-bicolor-ragdoll-260nw-1276856914_jpg.rf.f827c7ff205142b7af4f0de2ae569975.jpg</filename>
+	<path>beautiful-male-blue-bicolor-ragdoll-260nw-1276856914_jpg.rf.f827c7ff205142b7af4f0de2ae569975.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>347</width>
+		<height>280</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>86</xmin>
+			<xmax>161</xmax>
+			<ymin>47</ymin>
+			<ymax>127</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>persian-290-_jpg.rf.08501a3e6bca9177aaeb24ac04151840.jpg</filename>
+	<path>persian-290-_jpg.rf.08501a3e6bca9177aaeb24ac04151840.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>300</width>
+		<height>400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>persian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>86</xmin>
+			<xmax>215</xmax>
+			<ymin>61</ymin>
+			<ymax>174</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>bengal-464-_jpg.rf.09c701e9928cd616627ae4a94863b8c0.jpg</filename>
+	<path>bengal-464-_jpg.rf.09c701e9928cd616627ae4a94863b8c0.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>300</width>
+		<height>360</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>bengal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>10</xmin>
+			<xmax>196</xmax>
+			<ymin>23</ymin>
+			<ymax>204</ymax>
+		</bndbox>
+	</object>
+</annotation>

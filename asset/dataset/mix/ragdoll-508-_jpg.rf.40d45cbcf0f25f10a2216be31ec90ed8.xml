@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>ragdoll-508-_jpg.rf.40d45cbcf0f25f10a2216be31ec90ed8.jpg</filename>
+	<path>ragdoll-508-_jpg.rf.40d45cbcf0f25f10a2216be31ec90ed8.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>320</width>
+		<height>213</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>174</xmin>
+			<xmax>228</xmax>
+			<ymin>38</ymin>
+			<ymax>91</ymax>
+		</bndbox>
+	</object>
+</annotation>

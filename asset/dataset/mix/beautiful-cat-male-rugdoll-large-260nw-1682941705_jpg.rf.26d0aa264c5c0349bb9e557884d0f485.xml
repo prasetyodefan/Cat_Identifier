@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>beautiful-cat-male-rugdoll-large-260nw-1682941705_jpg.rf.26d0aa264c5c0349bb9e557884d0f485.jpg</filename>
+	<path>beautiful-cat-male-rugdoll-large-260nw-1682941705_jpg.rf.26d0aa264c5c0349bb9e557884d0f485.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>390</width>
+		<height>280</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>78</xmin>
+			<xmax>202</xmax>
+			<ymin>38</ymin>
+			<ymax>144</ymax>
+		</bndbox>
+	</object>
+</annotation>

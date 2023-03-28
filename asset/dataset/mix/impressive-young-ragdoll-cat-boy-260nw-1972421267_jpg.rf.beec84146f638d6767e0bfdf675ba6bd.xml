@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>impressive-young-ragdoll-cat-boy-260nw-1972421267_jpg.rf.beec84146f638d6767e0bfdf675ba6bd.jpg</filename>
+	<path>impressive-young-ragdoll-cat-boy-260nw-1972421267_jpg.rf.beec84146f638d6767e0bfdf675ba6bd.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>260</width>
+		<height>280</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>79</xmin>
+			<xmax>169</xmax>
+			<ymin>25</ymin>
+			<ymax>122</ymax>
+		</bndbox>
+	</object>
+</annotation>

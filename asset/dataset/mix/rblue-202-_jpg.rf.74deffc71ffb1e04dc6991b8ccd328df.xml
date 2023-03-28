@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>rblue-202-_jpg.rf.74deffc71ffb1e04dc6991b8ccd328df.jpg</filename>
+	<path>rblue-202-_jpg.rf.74deffc71ffb1e04dc6991b8ccd328df.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>260</width>
+		<height>513</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>1</xmin>
+			<xmax>219</xmax>
+			<ymin>13</ymin>
+			<ymax>282</ymax>
+		</bndbox>
+	</object>
+</annotation>

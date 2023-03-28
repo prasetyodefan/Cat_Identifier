@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>fluffy-beautiful-white-cat-neva-260nw-1029855268_jpg.rf.dbca8ee8a5df1910459aecd0d4b966f1.jpg</filename>
+	<path>fluffy-beautiful-white-cat-neva-260nw-1029855268_jpg.rf.dbca8ee8a5df1910459aecd0d4b966f1.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>390</width>
+		<height>280</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>119</xmin>
+			<xmax>221</xmax>
+			<ymin>83</ymin>
+			<ymax>188</ymax>
+		</bndbox>
+	</object>
+</annotation>
