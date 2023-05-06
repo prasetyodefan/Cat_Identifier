@@ -4,7 +4,7 @@ import os
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('asset/dataset/DF 5 Cat Breed/'):
+for dirname, subdirs, filenames in os.walk('asset/dataset/mix/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
@@ -20,8 +20,8 @@ import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
 
-path_annotations = "asset/dataset/DF 5 Cat Breed/"
-path_images = "asset/dataset/DF 5 Cat Breed/"
+path_annotations = "asset/dataset/mix/"
+path_images = "asset/dataset/mix/"
 
 class_names = ['bengal','persian','siamese','ragdoll','rblue']
 images = []
@@ -63,7 +63,7 @@ import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=248):
+def resize_image(img, size=500):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
@@ -88,7 +88,7 @@ for i in range(len(images)):
 from PIL import Image
 from scipy.ndimage import convolve
 
-def phog(img, bin_size=32, levels=3):
+def phog(img, bin_size=16, levels=3):
     # Compute the gradient magnitude and orientation
     gx = convolve(img, [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
     gy = convolve(img, [[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
@@ -169,7 +169,7 @@ for i in range(len(images)):
 from sklearn.model_selection import train_test_split
 
 X, y = features, np.array(target)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
 print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
