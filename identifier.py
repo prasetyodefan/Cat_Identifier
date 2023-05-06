@@ -23,7 +23,7 @@ from skimage.io import imread
 path_annotations = "asset/dataset/mix/"
 path_images = "asset/dataset/mix/"
 
-class_names = ['bengal','persian','siamese','ragdoll','rblue']
+class_names = ['persian','siamese','ragdoll','rblue']
 images = []
 target = []
 
@@ -63,7 +63,7 @@ import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=500):
+def resize_image(img, size=640):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
