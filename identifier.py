@@ -4,7 +4,7 @@ import os
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('asset/dataset/DF 5 Cat Breed/'):
+for dirname, subdirs, filenames in os.walk('asset/dataset/mix/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
@@ -20,10 +20,10 @@ import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
 
-path_annotations = "asset/dataset/DF 5 Cat Breed/"
-path_images = "asset/dataset/DF 5 Cat Breed/"
+path_annotations = "asset/dataset/mix/"
+path_images = "asset/dataset/mix/"
 
-class_names = ['bengal','persian','siamese','ragdoll','rblue']
+class_names = ['persian','siamese','ragdoll','rblue']
 images = []
 target = []
 
@@ -63,7 +63,7 @@ import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=248):
+def resize_image(img, size=640):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
