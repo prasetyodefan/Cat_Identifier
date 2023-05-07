@@ -10,9 +10,10 @@
 from PIL import Image
 import numpy as np
 from scipy import ndimage
+from skimage import exposure
 
 #! Load citra
-img = Image.open('cat_image.jpg')
+img = Image.open('pic.jpg')
 
 #! Resize citra
 resized_img = img.resize((64, 64))
@@ -34,4 +35,5 @@ denoised_img = ndimage.median_filter(normalized_img, size=3)
 p2, p98 = np.percentile(denoised_img, (2, 98))
 stretched_img = exposure.rescale_intensity(denoised_img, in_range=(p2, p98))
 
-
+np.set_printoptions(threshold=np.inf)
+print(stretched_img)
