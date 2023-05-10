@@ -1,7 +1,28 @@
+import cv2
 import numpy as np
-from scipy.ndimage import sobel
-from skimage.feature import hog
+from skimage import filters, feature
+from skimage import exposure
+from matplotlib import pyplot as plt
 
+# Membaca citra
+image = cv2.imread('pic.jpg', cv2.IMREAD_COLOR)
+
+# Mengkonversi citra ke citra grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Mengaplikasikan Adaptive Histogram Equalization (AHE) pada citra grayscale
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+clahe_image = clahe.apply(gray_image)
+
+# Menerapkan Unsharp Masking pada citra hasil AHE
+blurred = cv2.GaussianBlur(clahe_image, (5, 5), 0)
+unsharp_mask = cv2.addWeighted(clahe_image, 1.5, blurred, -0.5, 0)
+
+# Melakukan segmentasi dengan Thresholding
+threshold_value = filters.threshold_otsu(unsharp_mask)
+binary_image = np.uint8(unsharp_mask > threshold_value) * 255
+
+# Menghitung Histogram of Oriented Gradients (HOG)
 def calculate_gradient(img):
     sobel_x = sobel(img, axis=1)
     sobel_y = sobel(img, axis=0)
@@ -62,24 +83,18 @@ def calculate_hog(img, cell_size=(8, 8), block_size=(2, 2), nbins=9):
 
     return hog_descriptor
 
-# Test HOG calculation on an example image
-image = np.random.randint(0, 255, (128, 128)).astype(np.uint8)
-nbins = 6  # Change the number of bins
-cell_size = (8, 8)  # Change the cell size
-block_size = (2, 2)  # Change the block size
-hog = calculate_hog(image, cell_size=cell_size, block_size=block_size, nbins=nbins)
+hog_image = feature.hog(unsharp_mask, orientations=9, pixels_per_cell=(8, 8),
+                                      cells_per_block=(2, 2), visualize=True, block_norm='L2-Hys')
 
-print(hog.shape)  # Output: Varies based on the number of bins, cell size, and block size
+# Menampilkan citra asli, citra hasil AHE, citra hasil Unsharp Masking,
+# citra hasil segmentasi, dan visualisasi HOG
+titles = ['Original', 'AHE', 'Unsharp Masking', 'Segmentation', 'HOG']
+images = [image, clahe_image, unsharp_mask, binary_image, hog_image]
 
-import cv2
-from skimage.feature import hog
-image = cv2.imread('pic.jpg', cv2.IMREAD_COLOR)
-gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-# Menghitung HOG descriptor dari citra yang telah diregangkan (stretched_img)
-hog_features, hog_image = hog(gray_image, orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2, 2), visualize=True)
+for i in range(5):
+    plt.subplot(1, 5, i+1)
+    plt.imshow(images[i], cmap='gray')
+    plt.title(titles[i])
+    plt.xticks([]), plt.yticks([])
 
-import matplotlib.pyplot as plt
-# Menampilkan citra HOG
-plt.imshow(hog_image, cmap='gray')
-plt.axis('off')
 plt.show()

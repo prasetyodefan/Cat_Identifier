@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 
 # Load an example image
 image = cv2.imread('pic.jpg', cv2.IMREAD_GRAYSCALE)
-
+print(image)
 # Calculate the HOG features and visualization
 hog_features ,hog_image = hog(imagee, orientations=8, pixels_per_cell=(16, 16),
                    cells_per_block=(2, 2), block_norm='L2', visualize=True)
