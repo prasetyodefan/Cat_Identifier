@@ -63,7 +63,7 @@ import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=256):
+def resize_image(img, size=640):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
@@ -87,82 +87,74 @@ for i in range(len(images)):
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
 from PIL import Image
 from scipy.ndimage import convolve
+import numpy as np
+from scipy.ndimage import sobel
 
-def phog(img, bin_size=16, levels=3):
-    # Compute the gradient magnitude and orientation
-    gx = convolve(img, [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-    gy = convolve(img, [[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
-    magnitude = np.sqrt(gx**2 + gy**2)
-    orientation = np.arctan2(gy, gx) * 180 / np.pi
+def calculate_hog(img, cell_size=(8, 8), block_size=(2, 2), nbins=9):
+    def calculate_gradient(img):
+        sobel_x = sobel(img, axis=1)
+        sobel_y = sobel(img, axis=0)
+        mag = np.sqrt(sobel_x**2 + sobel_y**2)
+        ang = np.arctan2(sobel_y, sobel_x) * (180 / np.pi)
+        return mag, ang
 
-    # Binning
-    # ---------------------------------------------------------------------------
-    # The gradient orientation is divided into bin_size bins using integer division
-    binned_orientation = (orientation / bin_size).astype(np.int32) % bin_size
+    def calculate_histogram(ang, mag, nbins):
+        hist = np.zeros(nbins)
+        bin_width = 180 / nbins
+        flattened_ang = ang.flatten()
+        flattened_mag = mag.flatten()
+        for i in range(len(flattened_ang)):
+            bin_index = int((flattened_ang[i] + 90) / bin_width)
+            hist[bin_index] += flattened_mag[i]
+        return hist
 
-    # Pyramidal representation
-    # ---------------------------------------------------------------------------
-    # downsampling the image using the pyrDown function and computing the histograms of
-    # oriented gradients for each level. The histograms are stored in a list pyramid.
-    pyramid = []
-    def pyr_down(img, bin_size=16):
-        # Define the downsampling kernel
+    # Step 1: Calculate gradient image
+    mag, ang = calculate_gradient(img)
 
-        # The values in the 5x5 array are chosen based on the Gaussian function, which is a symmetric bell-
-        # shaped curve that has a peak at the center and falls off symmetrically in both directions.
-        kernel = np.array([[1, 4, 6, 4, 1],
-                           [4, 16, 24, 16, 4],
-                           [6, 24, 36, 24, 6],
-                           [4, 16, 24, 16, 4],
-                           [1, 4, 6, 4, 1]])
+    # Step 2: Divide image into cells
+    num_cells_y = img.shape[0] // cell_size[0]
+    num_cells_x = img.shape[1] // cell_size[1]
+    cells = []
+    for i in range(num_cells_y):
+        for j in range(num_cells_x):
+            cell_mag = mag[i*cell_size[0]:(i+1)*cell_size[0], j*cell_size[1]:(j+1)*cell_size[1]]
+            cell_ang = ang[i*cell_size[0]:(i+1)*cell_size[0], j*cell_size[1]:(j+1)*cell_size[1]]
+            cells.append((cell_mag, cell_ang))
 
-        # Normalize the kernel based on the factor
-        kernel = 1.0/bin_size * kernel
+    # Step 3: Calculate histogram for each cell
+    cell_hists = []
+    for cell_mag, cell_ang in cells:
+        cell_hist = calculate_histogram(cell_ang, cell_mag, nbins)
+        cell_hists.append(cell_hist)
 
-        # Convolve the image with the kernel
+    # Step 4: Divide cells into blocks and concatenate histograms
+    blocks = []
+    block_size_cells_y = block_size[0]
+    block_size_cells_x = block_size[1]
+    for i in range(num_cells_y - block_size_cells_y + 1):
+        for j in range(num_cells_x - block_size_cells_x + 1):
+            block_hist = np.concatenate([
+                cell_hists[(i+k)*num_cells_x + j+l]
+                for k in range(block_size_cells_y)
+                for l in range(block_size_cells_x)
+            ])
+            blocks.append(block_hist)
 
-        #  mode = 'constant' means that the values of the image at the edges
-        #  are assumed to be a constant value, which is typically set to 0.
-        convolved = convolve(img, kernel, mode='constant')
+    # Step 5: Normalize blocks using L2-norm
+    blocks = np.array(blocks)
+    block_norm = np.sqrt(np.sum(blocks**2, axis=1)) + 1e-6  # Add small epsilon to avoid division by zero
+    blocks /= block_norm[:, np.newaxis]
 
-        # Downsample the image by taking every other row and column
-        downsampled = convolved[::2, ::2]
+    # Step 6: Concatenate normalized blocks into HOG descriptor
+    hog_descriptor = blocks.flatten()
 
-        return downsampled
-
-
-    for i in range(levels):
-        histograms = np.zeros((bin_size,))
-        for y in range(img.shape[0]):
-            for x in range(img.shape[1]):
-                histograms[binned_orientation[y, x]] += magnitude[y, x]
-        pyramid.append(histograms)
-        img = pyr_down(img)
-
-    # Step 5: Normalization
-    # ---------------------------------------------------------------------------
-
-    normalized_pyramid = []
-    for histograms in pyramid:
-        normalization_factor = np.sum(histograms**2)**0.5
-        if normalization_factor > 1e-12:
-            histograms /= normalization_factor
-        normalized_pyramid.append(histograms)
-
-    # Step 6: Concatenation
-    # ---------------------------------------------------------------------------
-
-    phog_descriptor = np.concatenate(normalized_pyramid)
-
-    # Step 7: Representation (linear vector)
-    # ---------------------------------------------------------------------------
-
-    return phog_descriptor
+    return hog_descriptor
+    
 
 features = []
 for i in range(len(images)):
   print("Processing item", i+1, "of ",len(images),"...")
-  features.append(phog(images[i]))
+  features.append(calculate_hog(images[i], cell_size=(8,8), block_size=(2,2), nbins=9))
 
 # print(features[0])
 
