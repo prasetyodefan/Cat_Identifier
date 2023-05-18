@@ -62,7 +62,6 @@ def compute_hog(img, bin_size=16):
 
     return binned_orientation
 
-
 # Extract features from the single image
 features = compute_hog(img_normalized)
 
