@@ -1,71 +1,33 @@
 import numpy as np
-from PIL import Image
+import matplotlib.pyplot as plt
+from skimage import exposure
 
-def adaptive_histogram_equalization(image, tile_size):
-    # Convert the image to grayscale if it's in RGB format
-    if image.mode == 'RGB':
-        image = image.convert('L')
+def clahe(image, clip_limit, grid_size):
+    # Normalize the image to the range of -1 to 1
+    image = image.astype(np.float32) / 255.0 * 2.0 - 1.0
 
-    # Get the image size
-    width, height = image.size
+    # Apply CLAHE to the normalized image
+    clahe_image = exposure.equalize_adapthist(image, clip_limit=clip_limit, kernel_size=grid_size)
 
-    # Calculate the number of rows and columns for tiles
-    num_rows = height // tile_size
-    num_cols = width // tile_size
+    return clahe_image
 
-    # Initialize the enhanced image
-    enhanced_image = Image.new('L', (width, height))
+# Read the image
+image = plt.imread('pcc.jpg')
 
-    for row in range(num_rows):
-        for col in range(num_cols):
-            # Calculate the tile boundaries
-            start_x = col * tile_size
-            end_x = start_x + tile_size
-            start_y = row * tile_size
-            end_y = start_y + tile_size
+# Convert the image to grayscale if it is not already
+if image.ndim == 3:
+    image = np.mean(image, axis=2)
 
-            # Extract the tile from the image
-            tile = image.crop((start_x, start_y, end_x, end_y))
+# Apply CLAHE with clip limit 0.03 and grid size 8x8
+clahe_image = clahe(image, clip_limit=.01, grid_size=8)
 
-            # Calculate the histogram of the tile
-            histogram = [0] * 256
-            pixels = np.array(tile)
-            for i in range(tile_size):
-                for j in range(tile_size):
-                    pixel = pixels[i, j]
-                    histogram[pixel] += 1
+# Display the original image and the CLAHE image
+plt.subplot(1, 2, 1)
+plt.imshow(image, cmap='gray')
+plt.title('Original Image')
 
-            # Calculate the cumulative distribution function (CDF)
-            cdf = [0] * 256
-            cdf[0] = histogram[0]
-            for i in range(1, 256):
-                cdf[i] = cdf[i-1] + histogram[i]
+plt.subplot(1, 2, 2)
+plt.imshow(clahe_image, cmap='gray')
+plt.title('CLAHE Image')
 
-            # Calculate the equalized tile
-            equalized_tile = Image.new('L', (tile_size, tile_size))
-            equalized_pixels = []
-            for i in range(tile_size):
-                for j in range(tile_size):
-                    pixel = pixels[i, j]
-                    equalized_pixel = int(cdf[pixel] * 255 / (tile_size ** 2))
-                    equalized_pixels.append(equalized_pixel)
-            equalized_tile.putdata(equalized_pixels)
-
-            # Paste the equalized tile onto the enhanced image
-            enhanced_image.paste(equalized_tile, (start_x, start_y))
-
-    return enhanced_image
-
-
-# Open the image
-image = Image.open('pic.jpg')
-
-# Set the tile size for Adaptive Histogram Equalization
-tile_size = 8
-
-# Apply Adaptive Histogram Equalization
-enhanced_image = adaptive_histogram_equalization(image, tile_size)
-
-# Display the original image and the enhanced image
-image.show()
-enhanced_image.show()
+plt.show()

@@ -1,23 +1,47 @@
-from skimage.feature import hog
+# Import the necessary libraries
 import cv2
-from skimage import data, exposure
-import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
 
-# Load an example image
-image = cv2.imread('pic.jpg', cv2.IMREAD_GRAYSCALE)
+# Load the image
+image = Image.open("pic.jpg").load().convert("L")
 
-# Calculate the HOG features and visualization
-hog_features, hog_image = hog(image, visualize=True)
+# Convert the image to grayscale
+grayscale_image = np.array(image)
 
-# Plot the original image and its HOG visualization
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+# Define the HOG parameters
+# The number of orientations to use
+orientations = 9
+# The number of pixels per cell
+pixels_per_cell = (8, 8)
+# The number of cells per block
+cells_per_block = (2, 2)
 
-ax1.axis('off')
-ax1.imshow(image, cmap=plt.cm.gray)
-ax1.set_title('Original Image')
+# Calculate the gradient of the image
+# This calculates the magnitude and direction of the gradient at each pixel
+gradient = cv2.Sobel(grayscale_image, cv2.CV_64F, 1, 0, ksize=3)
 
-ax2.axis('off')
-ax2.imshow(hog_image, cmap=plt.cm.gray)
-ax2.set_title('HOG Visualization')
+# Calculate the orientation of each gradient
+# This calculates the angle of the gradient at each pixel
+gradient_orientations = np.arctan2(gradient[:, :, 1], gradient[:, :, 0])
 
-plt.show()
+# Bin the gradient orientations into a histogram
+# This creates a histogram of the gradient orientations at each cell
+hog_features = np.zeros((image.shape[0] // pixels_per_cell[0], image.shape[1] // pixels_per_cell[1], orientations))
+for i in range(hog_features.shape[0]):
+    for j in range(hog_features.shape[1]):
+        for k in range(orientations):
+            hog_features[i, j, k] = np.sum(gradient_orientations[i * pixels_per_cell[0]:(i + 1) * pixels_per_cell[0], j * pixels_per_cell[1]:(j + 1) * pixels_per_cell[1]] == k)
+
+# Visualize the HOG features
+# This creates a heatmap of the HOG features
+hog_visualization = np.zeros((image.shape[0], image.shape[1]))
+for i in range(hog_features.shape[0]):
+    for j in range(hog_features.shape[1]):
+        for k in range(orientations):
+            hog_visualization[i * pixels_per_cell[0] + pixels_per_cell[0] // 2, j * pixels_per_cell[1] + pixels_per_cell[1] // 2] += hog_features[i, j, k]
+
+# Display the image and the HOG visualization
+cv2.imshow("Image", image)
+cv2.imshow("HOG Visualization", hog_visualization)
+cv2.waitKey(0)
