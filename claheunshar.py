@@ -93,7 +93,7 @@ images = [image, clahe_image, unsharp_mask, binary_image, hog_image]
 
 for i in range(5):
     plt.subplot(1, 5, i+1)
-    plt.imshow(images[i], cmap='gray')
+    plt.imshow(images[i], cmap='pink')
     plt.title(titles[i])
     plt.xticks([]), plt.yticks([])
 
