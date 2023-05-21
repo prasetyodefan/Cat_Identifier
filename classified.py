@@ -75,3 +75,4 @@ features_2d = features_flat.reshape(1, -1)
 predicted_class = final_clf.predict(features_2d)[0]
 predicted_breed = class_names[predicted_class]
 print("Predicted breed:", predicted_breed)
+

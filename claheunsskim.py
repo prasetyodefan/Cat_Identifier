@@ -3,24 +3,30 @@ import numpy as np
 from skimage import filters, feature
 from skimage import exposure
 from matplotlib import pyplot as plt
+from skimage.filters import sobel
+import skimage.io as io
+import skimage.color as color
+from skimage import exposure, filters
+from skimage.filters import unsharp_mask
 
-# Membaca citra
-image = cv2.imread('pic.jpg', cv2.IMREAD_COLOR)
+# Load the image
+image = io.imread("pc.jpg", as_gray=False)
+if image.shape[2] == 4:
+    image = color.rgba2rgb(image)
 
-# Mengkonversi citra ke citra grayscale
-gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Convert the image to grayscale
+gray_image = color.rgb2gray(image)
 
-# Mengaplikasikan Adaptive Histogram Equalization (AHE) pada citra grayscale
-clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-clahe_image = clahe.apply(gray_image)
+# Apply Contrast Limited Adaptive Histogram Equalization (CLAHE)
+clahe = exposure.equalize_adapthist(gray_image, clip_limit=0.02)
 
-# Menerapkan Unsharp Masking pada citra hasil AHE
-blurred = cv2.GaussianBlur(clahe_image, (5, 5), 0)
-unsharp_mask = cv2.addWeighted(clahe_image, 1.5, blurred, -0.5, 0)
+# Apply Unsharp Masking to the CLAHE image
+blurred = filters.unsharp_mask(clahe, radius=1, amount=1)
+unsharp_mask = clahe + blurred
 
-# Melakukan segmentasi dengan Thresholding
-threshold_value = filters.threshold_otsu(unsharp_mask)
-binary_image = np.uint8(unsharp_mask > threshold_value) * 255
+# Perform thresholding
+threshold_value = filters.threshold_otsu(blurred)
+binary_image = blurred > threshold_value
 
 # Menghitung Histogram of Oriented Gradients (HOG)
 def calculate_gradient(img):
@@ -89,7 +95,8 @@ hog_image = feature.hog(unsharp_mask, orientations=9, pixels_per_cell=(8, 8),
 # Menampilkan citra asli, citra hasil AHE, citra hasil Unsharp Masking,
 # citra hasil segmentasi, dan visualisasi HOG
 titles = ['Original', 'AHE', 'Unsharp Masking', 'Segmentation', 'HOG']
-images = [image, clahe_image, unsharp_mask, binary_image, hog_image]
+images = [image, clahe_image, unsharp_mask, binary_image, hog_image[1]]
+
 
 for i in range(5):
     plt.subplot(1, 5, i+1)

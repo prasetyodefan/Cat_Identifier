@@ -1,6 +1,6 @@
 ## Preprocessing step 1 - filtered images and xml files
 import os
-
+import cv2
 img_names = []
 xml_names = []
 
@@ -19,11 +19,17 @@ print(len(xml_names), "xml files")
 import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
+import cv2
+import numpy as np
+from skimage import filters, feature
+from skimage import exposure
+from matplotlib import pyplot as plt
+from skimage.filters import sobel
 
 path_annotations = "asset/dataset/mix/"
 path_images = "asset/dataset/mix/"
 
-class_names = ['persian','siamese','ragdoll','rblue']
+class_names = ['bengal','persian','siamese','ragdoll','rblue']
 images = []
 target = []
 
@@ -63,16 +69,24 @@ import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=640):
+def resize_image(img, size=258):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
 
-def remove_background(img):
+def prepo(img):
   _img = img.copy()
-  thresh = skimage.filters.threshold_otsu(_img)
-  _img = (_img > thresh).astype(np.float32)
-  return _img
+  clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+  clahe_image = clahe.apply(_img)
+  
+  # Menerapkan Unsharp Masking pada citra hasil AHE
+  blurred = cv2.GaussianBlur(clahe_image, (5, 5), 0)
+  unsharp_mask = cv2.addWeighted(clahe_image, 1.5, blurred, -0.5, 0)
+
+  # Melakukan segmentasi dengan Thresholding
+  threshold_value = filters.threshold_otsu(unsharp_mask)
+  binary_image = np.uint8(unsharp_mask > threshold_value) * 255
+  return _img  
 
 def grayscale(img):
   _img = img.copy()
@@ -82,7 +96,7 @@ def grayscale(img):
 for i in range(len(images)):
   images[i] = resize_image(images[i])
   images[i] = grayscale(images[i])
-  images[i] = remove_background(images[i])
+  images[i] = prepo(images[i])
 
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
 from PIL import Image
@@ -245,7 +259,9 @@ from sklearn.metrics import ConfusionMatrixDisplay
 
 # Plot non-normalized confusion matrix
 titles_options = [
+   
     ("Confusion matrix, without normalization", None),
+    
 ]
 for title, normalize in titles_options:
     disp = ConfusionMatrixDisplay.from_estimator(
