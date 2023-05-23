@@ -66,8 +66,9 @@ for i in class_names:
 
 ## Preprocessing step 3 - resize images to 258x258 and normalize (remove background and grayscale)
 import numpy as np
-import skimage
 from skimage.transform import resize
+from scipy import ndimage
+from skimage import io, color, exposure, filters
 
 def resize_image(img, size=258):
   _img = img.copy() 
@@ -76,16 +77,20 @@ def resize_image(img, size=258):
 
 def prepo(img):
   _img = img.copy()
-  clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-  clahe_image = clahe.apply(_img)
-  
-  # Menerapkan Unsharp Masking pada citra hasil AHE
-  blurred = cv2.GaussianBlur(clahe_image, (5, 5), 0)
-  unsharp_mask = cv2.addWeighted(clahe_image, 1.5, blurred, -0.5, 0)
 
-  # Melakukan segmentasi dengan Thresholding
+  # Apply Adaptive Histogram Equalization (AHE) to the grayscale image
+  clahe_image = exposure.equalize_adapthist(_img , clip_limit=0.02)
+
+  # Apply Unsharp Masking to the AHE result
+  blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
+  unsharp_mask = clahe_image - 0.7 * blurred
+
+  # Perform segmentation using Thresholding
   threshold_value = filters.threshold_otsu(unsharp_mask)
-  binary_image = np.uint8(unsharp_mask > threshold_value) * 255
+  binary_image = unsharp_mask > threshold_value
+
+  # Convert the binary image to uint8 and scale it to 0-255
+  binary_image = np.uint8(binary_image) * 255
   return _img  
 
 def grayscale(img):
@@ -114,11 +119,13 @@ def calculate_hog(img, cell_size=(8, 8), block_size=(2, 2), nbins=9):
 
     def calculate_histogram(ang, mag, nbins):
         hist = np.zeros(nbins)
-        bin_width = 180 / nbins
+        bin_width = 180.0 / nbins
         flattened_ang = ang.flatten()
         flattened_mag = mag.flatten()
         for i in range(len(flattened_ang)):
-            bin_index = int((flattened_ang[i] + 90) / bin_width)
+            bin_index = int(flattened_ang[i] / bin_width)
+            if bin_index == nbins:  # Handle the case when the angle is exactly 180 degrees
+                bin_index = 0
             hist[bin_index] += flattened_mag[i]
         return hist
 
