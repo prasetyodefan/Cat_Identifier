@@ -5,7 +5,7 @@ from skimage import exposure
 from matplotlib import pyplot as plt
 from skimage.filters import sobel
 
-# Membaca citra
+# Membaca citra 
 image = cv2.imread('pc.jpg', cv2.IMREAD_COLOR)
 
 # Mengkonversi citra ke citra grayscale

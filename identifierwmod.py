@@ -175,9 +175,9 @@ def calculate_hog(img, cell_size=(8, 8), block_size=(2, 2), nbins=9):
 features = []
 for i in range(len(images)):
   print("Processing item", i+1, "of ",len(images),"...")
-  features.append(calculate_hog(images[i], cell_size=(8,8), block_size=(2,2), nbins=9))
+  features.append(calculate_hog(images[i]))
 
-# print(features[0])
+print(features[0])
 
 from sklearn.model_selection import train_test_split
 
@@ -190,97 +190,97 @@ print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 ## Classification step 1
 
 
-# # # ------------------------------------------------------
-# from sklearn.svm import SVC
-# from sklearn.tree import DecisionTreeClassifier
-# from sklearn.ensemble import StackingClassifier
-# from sklearn.linear_model import LogisticRegression
-
-# clf = StackingClassifier(
-#     estimators=[('svm', SVC(random_state=42)),
-#                 ('tree', DecisionTreeClassifier(random_state=42))],
-#     final_estimator=LogisticRegression(random_state=42),
-#     n_jobs=-1)
-
-# from sklearn.model_selection import GridSearchCV
-
-# param_grid = {
-#     'svm__C': [1.6, 1.7, 1.8],
-#     'svm__kernel': ['rbf'],
-#     'tree__criterion': ['entropy'],
-#     'tree__max_depth': [9, 10, 11],
-#     'final_estimator__C': [1.3, 1.4, 1.5]
-# }
-
-# grid = GridSearchCV(
-#     estimator=clf,
-#     param_grid=param_grid,
-#     scoring='accuracy',
-#     n_jobs=-1)
-
-# grid.fit(X_train, y_train)
-
-# print('Best parameters: %s' % grid.best_params_)
-# print('Accuracy: %.2f' % grid.best_score_)
-# # # ------------------------------------------------------
-
+# # ------------------------------------------------------
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import StackingClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42)),
-                ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))],
-    final_estimator=LogisticRegression(C=1.5, random_state=42),
+clf = StackingClassifier(
+    estimators=[('svm', SVC(random_state=42)),
+                ('tree', DecisionTreeClassifier(random_state=42))],
+    final_estimator=LogisticRegression(random_state=42),
     n_jobs=-1)
 
-final_clf.fit(X_train, y_train)
-y_pred = final_clf.predict(X_test)
+from sklearn.model_selection import GridSearchCV
 
-print('Accuracy score : ', accuracy_score(y_test, y_pred))
-print('Precision score : ', precision_score(y_test, y_pred, average='weighted'))
-print('Recall score : ', recall_score(y_test, y_pred, average='weighted'))
-print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
+param_grid = {
+    'svm__C': [1.6, 1.7, 1.8],
+    'svm__kernel': ['rbf'],
+    'tree__criterion': ['entropy'],
+    'tree__max_depth': [9, 10, 11],
+    'final_estimator__C': [1.3, 1.4, 1.5]
+}
+
+grid = GridSearchCV(
+    estimator=clf,
+    param_grid=param_grid,
+    scoring='accuracy',
+    n_jobs=-1)
+
+grid.fit(X_train, y_train)
+
+print('Best parameters: %s' % grid.best_params_)
+print('Accuracy: %.2f' % grid.best_score_)
+# # ------------------------------------------------------
+
+# from sklearn.svm import SVC
+# from sklearn.tree import DecisionTreeClassifier
+# from sklearn.ensemble import StackingClassifier
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# final_clf = StackingClassifier(
+#     estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42)),
+#                 ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))],
+#     final_estimator=LogisticRegression(C=1.5, random_state=42),
+#     n_jobs=-1)
+
+# final_clf.fit(X_train, y_train)
+# y_pred = final_clf.predict(X_test)
+
+# print('Accuracy score : ', accuracy_score(y_test, y_pred))
+# print('Precision score : ', precision_score(y_test, y_pred, average='weighted'))
+# print('Recall score : ', recall_score(y_test, y_pred, average='weighted'))
+# print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
 
 
 # Save SVM Model
 
-import pickle
+# import pickle
 
-pkl_filename = 'svm_model.pkl'
-with open(pkl_filename, 'wb') as file:
-  pickle.dump(final_clf, file)
+# pkl_filename = 'svm_model.pkl'
+# with open(pkl_filename, 'wb') as file:
+#   pickle.dump(final_clf, file)
 
-# create confusion matrix
+# # create confusion matrix
 
-from sklearn.metrics import confusion_matrix
+# from sklearn.metrics import confusion_matrix
 
-cm = confusion_matrix(y_test, y_pred, labels=['bengal', 'persian', 'ragdoll', 'rblue', 'siamese'])
+# cm = confusion_matrix(y_test, y_pred, labels=['bengal', 'persian', 'ragdoll', 'rblue', 'siamese'])
 
-# print confusion matrix
+# # print confusion matrix
 
-import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
+# import matplotlib.pyplot as plt
+# from sklearn.metrics import ConfusionMatrixDisplay
 
-# Plot non-normalized confusion matrix
-titles_options = [
+# # Plot non-normalized confusion matrix
+# titles_options = [
    
-    ("Confusion matrix, without normalization", None),
+#     ("Confusion matrix, without normalization", None),
     
-]
-for title, normalize in titles_options:
-    disp = ConfusionMatrixDisplay.from_estimator(
-        final_clf,
-        X_test,
-        y_test,
-        display_labels=class_names,
-        cmap=plt.cm.Blues,
-    )
-    disp.ax_.set_title(title)
+# ]
+# for title, normalize in titles_options:
+#     disp = ConfusionMatrixDisplay.from_estimator(
+#         final_clf,
+#         X_test,
+#         y_test,
+#         display_labels=class_names,
+#         cmap=plt.cm.Blues,
+#     )
+#     disp.ax_.set_title(title)
 
-    print(title)
-    print(disp.confusion_matrix)
+#     print(title)
+#     print(disp.confusion_matrix)
 
-plt.show()
+# plt.show()
