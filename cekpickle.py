@@ -1,13 +1,18 @@
-import numpy as np
 import pickle
-import matplotlib.pyplot as plt
-from math import sqrt, ceil
 
-# /content/model_params_ConvNet1.pickle
-# Opening file for reading in binary mode
-with open('svm_model.pickle', 'rb') as f:
-    d = pickle.load(f, encoding='latin1')  # dictionary type
+# Open the pickle file in read-binary mode
+with open('face_mask_detection.pkl', 'rb') as file:
+    data = pickle.load(file)
 
-# Showing loaded data from file
-for i, j in d.items():
-    print(i + ':', j.shape)
+# Inspect the loaded data
+if isinstance(data, dict):
+    # If the data is a dictionary
+    for key, value in data.items():
+        print(key, ":", value)
+elif isinstance(data, list):
+    # If the data is a list
+    for item in data:
+        print(item)
+else:
+    # Handle other data types or structures
+    print(data)
