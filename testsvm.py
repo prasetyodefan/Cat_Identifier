@@ -63,7 +63,7 @@ import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=256):
+def resize_image(img, size=640):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
@@ -236,7 +236,7 @@ print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
 
 import pickle
 
-pkl_filename = 'svm_model.pickle'
+pkl_filename = 'svm_model.pkl'
 with open(pkl_filename, 'wb') as file:
   pickle.dump(final_clf, file)
 
