@@ -37,5 +37,6 @@ pip install -r requirements.txt
 
 </p>
 
+SVM is not suitable for large datasets because of its high training time and it also takes more time in training compared to Naïve Bayes. It works poorly with overlapping classes and is also sensitive to the type of kernel used.
 
 
