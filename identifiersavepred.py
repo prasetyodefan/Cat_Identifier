@@ -29,6 +29,8 @@ path_images = "asset/dataset/td/"
 class_names = ['bengal','ragdoll','siamese','rblue']
 images = []
 target = []
+gmb = []
+cim= []
 
 # 'bengal','siamese','ragdoll' 0.78
 
@@ -51,11 +53,15 @@ for img_name in img_names:
       if temp[i]["name"] not in class_names:
         continue
       images.append(crop_bounding_box(img, temp[i]["bndbox"]))
+      cim.append(crop_bounding_box(img, temp[i]["bndbox"]))
+      gmb.append(img)
       target.append(temp[i]["name"])
   else:
     if temp["name"] not in class_names:
         continue
     images.append(crop_bounding_box(img, temp["bndbox"]))
+    cim.append(crop_bounding_box(img, temp["bndbox"]))
+    gmb.append(img)
     target.append(temp["name"])
 
 # print total target by class
@@ -308,7 +314,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.6, kernel='rbf', random_state=42))],
+    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42))],
     final_estimator=LogisticRegression(C=1.3, random_state=42),
     n_jobs=-1)
 
@@ -337,15 +343,15 @@ with open(pkl_filename, 'wb') as file:
 # ------------------------------------------------------
 #?             CONFUSSION MATRIX
 # ------------------------------------------------------
-# import matplotlib.pyplot as plt
-# from sklearn.metrics import ConfusionMatrixDisplay
-# from sklearn.metrics import classification_report
-# # print("Predicting cat breed on the test set")
-# print()
-# print(classification_report(y_test, 
-#                             y_pred, 
-#                             target_names=class_names
-#                             ))
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import classification_report
+# print("Predicting cat breed on the test set")
+print()
+print(classification_report(y_test, 
+                            y_pred, 
+                            target_names=class_names
+                            ))
 # ConfusionMatrixDisplay.from_estimator(
 #     final_clf, 
 #     X_test, 
@@ -386,8 +392,8 @@ import random
 rnd = random.randint(1, len(features))
 print()
 print('RAND DATA :',rnd )
-imshow(images[rnd])
-show()
+# imshow(images[rnd])
+# show()
 
 pdt = features[rnd]
 print('Len of Features : ', len(features))
@@ -395,3 +401,37 @@ prediction = loaded_model.predict([pdt])
 print("Real :", target[rnd])
 print("Prediction :", prediction)
 
+# Create a figure and axes
+fig, axes = plt.subplots(1, 4, figsize=(10, 5))
+
+# Display the first image
+axes[1].imshow(images[rnd])
+axes[1].set_title('Cropped ')
+
+# Display the second image
+axes[2].imshow(cim[rnd])
+axes[2].set_title('Cropped Original')
+
+axes[3].imshow(gmb[rnd])
+axes[3].set_title('Original')
+
+cmd = ConfusionMatrixDisplay.from_estimator(
+    final_clf, 
+    X_test, 
+    y_test,
+    display_labels=class_names, 
+    
+)
+cmd.plot(ax=axes[0],xticks_rotation="vertical" )
+
+# Adjust the layout
+
+# Show the plot
+plt.tight_layout()
+plt.show()
+
+# Total target by class
+# bengal      : 395 + 6
+# ragdoll     : 324 + 82 
+# siamese     : 255 + 165 
+# rblue       : 389 + 11
