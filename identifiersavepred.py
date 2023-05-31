@@ -25,10 +25,13 @@ from skimage.io import imread
 
 path_annotations = "asset/dataset/td/"
 path_images = "asset/dataset/td/"
-# 'bengal','persian','siamese','ragdoll','rblue'
-class_names = ['bengal','siamese','persian']
+# 'bengal','persian','siamese','ragdoll','rblue','sphynx'
+class_names = ['bengal','ragdoll','siamese','rblue']
 images = []
 target = []
+
+# 'bengal','siamese','ragdoll' 0.78
+
 
 def crop_bounding_box(img, bnd):
   x1, x2, y1, y2 = list(map(int, bnd.values()))
@@ -96,18 +99,18 @@ def prepo(img):
   _img = img.copy()
 
   # Apply Adaptive Histogram Equalization (AHE) to the grayscale image
-  clahe_image = exposure.equalize_adapthist(_img , clip_limit=0.03)
+  clahe_image = exposure.equalize_adapthist(_img , clip_limit=3)
 
   # Apply Unsharp Masking to the AHE result
   blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
-  unsharp_mask = clahe_image - 0.7 * blurred
+  unsharp_mask = clahe_image - 0.5 * blurred
 
   # Perform segmentation using Thresholding
   threshold_value = filters.threshold_otsu(unsharp_mask)
   binary_image = unsharp_mask > threshold_value
 
   # Convert the binary image to uint8 and scale it to 0-255
-  binary_image = np.uint8(binary_image) * 255
+  binary_image = binary_image.astype(np.float32)
   return _img  
 
 
@@ -138,7 +141,7 @@ def phog(img, bin_size=16, levels=3):
     # downsampling the image using the pyrDown function and computing the histograms of
     # oriented gradients for each level. The histograms are stored in a list pyramid.
     pyramid = []
-    def pyr_down(img, bin_size=16):
+    def pyr_down(img, bin_size=8):
         # Define the downsampling kernel
 
         # The values in the 5x5 array are chosen based on the Gaussian function, which is a symmetric bell-
@@ -218,29 +221,25 @@ splittime = end_split - start_split
 print()
 print("Execution Time Split Data : {} seconds".format(splittime))
 
-## Classification step 1
-# # ------------------------------------------------------
-# #!             TEST TUNING CLASSIFIER
-# # ------------------------------------------------------
-# from sklearn.svm import SVC
+# Classification step 1
+# ------------------------------------------------------
+# !             TEST TUNING CLASSIFIER
+# ------------------------------------------------------
+# from sklearn.svm import SVC, LinearSVC,NuSVC
 # from sklearn.tree import DecisionTreeClassifier
 # from sklearn.ensemble import StackingClassifier
 # from sklearn.linear_model import LogisticRegression
 # from sklearn.model_selection import GridSearchCV
+# from sklearn.metrics import accuracy_score
 
 # clf = StackingClassifier(
-#     estimators=[('svm', SVC(random_state=42)),
-#                 ('tree', DecisionTreeClassifier(random_state=42))],
+#     estimators=[('svm', SVC(random_state=42))],
 #     final_estimator=LogisticRegression(random_state=42),
 #     n_jobs=-1)
 
-
-
 # param_grid = {
 #     'svm__C': [1.6, 1.7, 1.8],
-#     'svm__kernel': ['rbf'],
-#     'tree__criterion': ['entropy'],
-#     'tree__max_depth': [9, 10, 11],
+#     'svm__kernel': ['linear','rbf'],
 #     'final_estimator__C': [1.3, 1.4, 1.5]
 # }
 
@@ -254,12 +253,53 @@ print("Execution Time Split Data : {} seconds".format(splittime))
 
 # print('Best parameters: %s' % grid.best_params_)
 # print('Accuracy       : %.2f' % grid.best_score_)
-# # ------------------------------------------------------
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
 
 
-# # ------------------------------------------------------
-# #!             RUN CLASSIFIER
-# # ------------------------------------------------------
+# Define the parameter grid for Random Forest
+# param_grid = {
+#     'n_estimators': [100, 200, 300],
+#     'max_depth': [None, 5, 10],
+#     'min_samples_split': [2, 5, 10],
+#     'min_samples_leaf': [1, 2, 4],
+#     'max_features': ['sqrt', 'log2']
+# }
+
+# # Create a Random Forest classifier
+# rf_classifier = RandomForestClassifier()
+
+# # Create GridSearchCV to tune the parameters
+# grid_search = GridSearchCV(estimator=rf_classifier, param_grid=param_grid, scoring='accuracy', cv=5)
+
+# # Fit the GridSearchCV to the training data
+# grid_search.fit(X_train, y_train)
+
+# # Get the best parameters and best score
+# best_params = grid_search.best_params_
+# best_score = grid_search.best_score_
+
+# print("Best Parameters:", best_params)
+# print("Best Score:", best_score)
+
+# # Use the best estimator to make predictions on the test set
+# best_estimator = grid_search.best_estimator_
+# y_pred = best_estimator.predict(X_test)
+
+# # Calculate the accuracy of the best estimator
+# accuracy = accuracy_score(y_test, y_pred)
+# print("Accuracy:", accuracy)
+
+
+# ------------------------------------------------------
+
+# # # ------------------------------------------------------
+# # #!             RUN CLASSIFIER
+# # # ------------------------------------------------------
 start_class = time.time()
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -268,9 +308,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.6, kernel='rbf', random_state=42)),
-                ('tree', DecisionTreeClassifier(criterion='entropy', 
-                                                max_depth=9, random_state=42))],
+    estimators=[('svm', SVC(C=1.6, kernel='rbf', random_state=42))],
     final_estimator=LogisticRegression(C=1.3, random_state=42),
     n_jobs=-1)
 
@@ -287,35 +325,73 @@ classtime = end_class - start_class
 print()
 print("Execution time Classifier : {} seconds".format(classtime))
 
+# ------------------------------------------------------
+#!               SAVE CLASSIFIER MODEL
+# ------------------------------------------------------
+import pickle
+pkl_filename = 'svm_model.pkl'
+with open(pkl_filename, 'wb') as file:
+  pickle.dump(final_clf, file)
 
 
-# # ------------------------------------------------------
-# #!               SAVE CLASSIFIER MODEL
-# # ------------------------------------------------------
-# # import pickle
-# # pkl_filename = 'svm_model.pkl'
-# # with open(pkl_filename, 'wb') as file:
-# #   pickle.dump(final_clf, file)
+# ------------------------------------------------------
+#?             CONFUSSION MATRIX
+# ------------------------------------------------------
+# import matplotlib.pyplot as plt
+# from sklearn.metrics import ConfusionMatrixDisplay
+# from sklearn.metrics import classification_report
+# # print("Predicting cat breed on the test set")
+# print()
+# print(classification_report(y_test, 
+#                             y_pred, 
+#                             target_names=class_names
+#                             ))
+# ConfusionMatrixDisplay.from_estimator(
+#     final_clf, 
+#     X_test, 
+#     y_test,
+#     display_labels=class_names, 
+#     xticks_rotation="vertical" #,cmap=plt.cm.Blues
+# )
+# plt.tight_layout()
+# plt.show()
 
+# from skimage.io import imshow,show
+# import random
 
-# # ------------------------------------------------------
-# #?             CONFUSSION MATRIX
-# # ------------------------------------------------------
-import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
-from sklearn.metrics import classification_report
-# print("Predicting cat breed on the test set")
+# fig, axs = plt.subplots(1, 3)
+
+# # Display the first image
+# axs[0].imshow(images[50])
+# axs[0].axis('off')
+
+# # Display the second image
+# axs[1].imshow(imaget[50])
+# axs[1].axis('off')
+
+# axs[2].text(0.5, 0.5, str(features[50]), fontsize=12, ha='center')
+# axs[2].axis('off')
+
+# # Show the plot
+# plt.show()
+
+import pickle
+
+pkl_filename = 'svm_model.pkl'
+with open(pkl_filename, 'rb') as file:
+    loaded_model = pickle.load(file)
+
+from skimage.io import imshow,show
+import random
+rnd = random.randint(1, len(features))
 print()
-print(classification_report(y_test, 
-                            y_pred, 
-                            target_names=class_names
-                            ))
-ConfusionMatrixDisplay.from_estimator(
-    final_clf, 
-    X_test, 
-    y_test,
-    display_labels=class_names, 
-    xticks_rotation="vertical" #,cmap=plt.cm.Blues
-)
-plt.tight_layout()
-plt.show()
+print('RAND DATA :',rnd )
+imshow(images[rnd])
+show()
+
+pdt = features[rnd]
+print('Len of Features : ', len(features))
+prediction = loaded_model.predict([pdt])
+print("Real :", target[rnd])
+print("Prediction :", prediction)
+
