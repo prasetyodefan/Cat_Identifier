@@ -6,7 +6,7 @@ start_pascal = time.time()
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('asset/dataset/td/'):
+for dirname, subdirs, filenames in os.walk('asset/dataset/DS_FIX/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
@@ -23,8 +23,8 @@ import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
 
-path_annotations = "asset/dataset/td/"
-path_images = "asset/dataset/td/"
+path_annotations = "asset/dataset/DS_FIX/"
+path_images = "asset/dataset/DS_FIX/"
 # 'bengal','persian','siamese','ragdoll','rblue','sphynx'
 class_names = ['bengal','ragdoll','siamese','rblue']
 images = []
@@ -85,7 +85,7 @@ from skimage.transform import resize
 from scipy import ndimage
 from skimage import io, color, exposure, filters
 
-def resize_image(img, size=32):
+def resize_image(img, size = 32):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
@@ -231,21 +231,23 @@ print("Execution Time Split Data : {} seconds".format(splittime))
 # ------------------------------------------------------
 # !             TEST TUNING CLASSIFIER
 # ------------------------------------------------------
-# from sklearn.svm import SVC, LinearSVC,NuSVC
+# from sklearn.svm import SVC
 # from sklearn.tree import DecisionTreeClassifier
 # from sklearn.ensemble import StackingClassifier
 # from sklearn.linear_model import LogisticRegression
 # from sklearn.model_selection import GridSearchCV
-# from sklearn.metrics import accuracy_score
 
 # clf = StackingClassifier(
-#     estimators=[('svm', SVC(random_state=42))],
+#     estimators=[('svm', SVC(random_state=42)),
+#                 ('tree', DecisionTreeClassifier(random_state=42))],
 #     final_estimator=LogisticRegression(random_state=42),
 #     n_jobs=-1)
 
 # param_grid = {
 #     'svm__C': [1.6, 1.7, 1.8],
-#     'svm__kernel': ['linear','rbf'],
+#     'svm__kernel': ['rbf','linear'],
+#     'tree__criterion': ['entropy','gini'],
+#     'tree__max_depth': [9, 10, 11],
 #     'final_estimator__C': [1.3, 1.4, 1.5]
 # }
 
@@ -260,45 +262,6 @@ print("Execution Time Split Data : {} seconds".format(splittime))
 # print('Best parameters: %s' % grid.best_params_)
 # print('Accuracy       : %.2f' % grid.best_score_)
 
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import accuracy_score
-from sklearn.datasets import make_classification
-from sklearn.model_selection import train_test_split
-
-
-# Define the parameter grid for Random Forest
-# param_grid = {
-#     'n_estimators': [100, 200, 300],
-#     'max_depth': [None, 5, 10],
-#     'min_samples_split': [2, 5, 10],
-#     'min_samples_leaf': [1, 2, 4],
-#     'max_features': ['sqrt', 'log2']
-# }
-
-# # Create a Random Forest classifier
-# rf_classifier = RandomForestClassifier()
-
-# # Create GridSearchCV to tune the parameters
-# grid_search = GridSearchCV(estimator=rf_classifier, param_grid=param_grid, scoring='accuracy', cv=5)
-
-# # Fit the GridSearchCV to the training data
-# grid_search.fit(X_train, y_train)
-
-# # Get the best parameters and best score
-# best_params = grid_search.best_params_
-# best_score = grid_search.best_score_
-
-# print("Best Parameters:", best_params)
-# print("Best Score:", best_score)
-
-# # Use the best estimator to make predictions on the test set
-# best_estimator = grid_search.best_estimator_
-# y_pred = best_estimator.predict(X_test)
-
-# # Calculate the accuracy of the best estimator
-# accuracy = accuracy_score(y_test, y_pred)
-# print("Accuracy:", accuracy)
 
 
 # ------------------------------------------------------
@@ -307,14 +270,18 @@ from sklearn.model_selection import train_test_split
 # # #!             RUN CLASSIFIER
 # # # ------------------------------------------------------
 start_class = time.time()
-from sklearn.svm import SVC
+from sklearn.svm import SVC,LinearSVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import StackingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
+# final_clf = LinearSVC(multi_class='crammer_singer', dual=False)
 final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42))],
+    estimators=[
+       ('svm', SVC(C=1.6, kernel='rbf', random_state=42)),
+       ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))        
+                ],
     final_estimator=LogisticRegression(C=1.3, random_state=42),
     n_jobs=-1)
 
@@ -431,7 +398,7 @@ plt.tight_layout()
 plt.show()
 
 # Total target by class
-# bengal      : 395 + 6
-# ragdoll     : 324 + 82 
-# siamese     : 255 + 165 
+# bengal      : 395 + 6   V
+# ragdoll     : 324 + 82  V
+# siamese     : 255 + 165 V
 # rblue       : 389 + 11
