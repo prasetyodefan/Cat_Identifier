@@ -278,12 +278,8 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 # final_clf = LinearSVC(multi_class='crammer_singer', dual=False)
 final_clf = StackingClassifier(
-    estimators=[
-       ('svm', SVC(C=1.6, kernel='rbf', random_state=42)),
-       ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))        
-                ],
-    final_estimator=LogisticRegression(C=1.3, random_state=42),
-    n_jobs=-1)
+    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42))],
+    final_estimator=LogisticRegression(C=1.4, random_state=42))
 
 final_clf.fit(X_train, y_train)
 y_pred = final_clf.predict(X_test)
