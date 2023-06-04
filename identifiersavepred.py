@@ -84,6 +84,7 @@ from skimage.transform import resize
 
 from scipy import ndimage
 from skimage import io, color, exposure, filters
+from skimage.filters import unsharp_mask
 
 def resize_image(img, size = 32):
   _img = img.copy() 
@@ -109,11 +110,11 @@ def prepo(img):
 
   # Apply Unsharp Masking to the AHE result
   blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
-  unsharp_mask = clahe_image - 0.5 * blurred
+  unsharp_maskk = clahe_image - 0.5 * blurred
 
   # Perform segmentation using Thresholding
-  threshold_value = filters.threshold_otsu(unsharp_mask)
-  binary_image = unsharp_mask > threshold_value
+  threshold_value = unsharp_mask(unsharp_maskk, radius=5, amount=2)
+  binary_image = unsharp_maskk > threshold_value
 
   # Convert the binary image to uint8 and scale it to 0-255
   binary_image = binary_image.astype(np.float32)
@@ -270,19 +271,16 @@ print("Execution Time Split Data : {} seconds".format(splittime))
 # # #!             RUN CLASSIFIER
 # # # ------------------------------------------------------
 start_class = time.time()
-from sklearn.svm import SVC,LinearSVC
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC, LinearSVC
 from sklearn.ensemble import StackingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-# final_clf = LinearSVC(multi_class='crammer_singer', dual=False)
-final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42))],
-    final_estimator=LogisticRegression(C=1.4, random_state=42))
+# clf = LinearSVC(multi_class='crammer_singer', dual=False)
+clf = SVC(C=1, kernel='rbf', random_state=42)
 
-final_clf.fit(X_train, y_train)
-y_pred = final_clf.predict(X_test)
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
 
 print()
 print('Accuracy score   : ', accuracy_score(y_test, y_pred))
@@ -300,7 +298,7 @@ print("Execution time Classifier : {} seconds".format(classtime))
 import pickle
 pkl_filename = 'svm_model.pkl'
 with open(pkl_filename, 'wb') as file:
-  pickle.dump(final_clf, file)
+  pickle.dump(clf, file)
 
 
 # ------------------------------------------------------
@@ -311,38 +309,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import classification_report
 # print("Predicting cat breed on the test set")
 print()
-print(classification_report(y_test, 
-                            y_pred, 
-                            target_names=class_names
-                            ))
-# ConfusionMatrixDisplay.from_estimator(
-#     final_clf, 
-#     X_test, 
-#     y_test,
-#     display_labels=class_names, 
-#     xticks_rotation="vertical" #,cmap=plt.cm.Blues
-# )
-# plt.tight_layout()
-# plt.show()
-
-# from skimage.io import imshow,show
-# import random
-
-# fig, axs = plt.subplots(1, 3)
-
-# # Display the first image
-# axs[0].imshow(images[50])
-# axs[0].axis('off')
-
-# # Display the second image
-# axs[1].imshow(imaget[50])
-# axs[1].axis('off')
-
-# axs[2].text(0.5, 0.5, str(features[50]), fontsize=12, ha='center')
-# axs[2].axis('off')
-
-# # Show the plot
-# plt.show()
+print(classification_report( y_test, y_pred, target_names=class_names ))
 
 import pickle
 
@@ -359,9 +326,9 @@ print('RAND DATA :',rnd )
 # show()
 
 pdt = features[rnd]
-print('Len of Features : ', len(features))
 prediction = loaded_model.predict([pdt])
-print("Real :", target[rnd])
+print('Len of Features : ', len(features))
+print("Data Test  :", target[rnd])
 print("Prediction :", prediction)
 
 # Create a figure and axes
@@ -378,13 +345,7 @@ axes[2].set_title('Cropped Original')
 axes[3].imshow(gmb[rnd])
 axes[3].set_title('Original')
 
-cmd = ConfusionMatrixDisplay.from_estimator(
-    final_clf, 
-    X_test, 
-    y_test,
-    display_labels=class_names, 
-    
-)
+cmd = ConfusionMatrixDisplay.from_estimator( clf, X_test, y_test, display_labels=class_names)
 cmd.plot(ax=axes[0],xticks_rotation="vertical" )
 
 # Adjust the layout
