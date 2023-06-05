@@ -1,37 +1,39 @@
 ## Preprocessing step 1 - filtered images and xml files
 import os
-import cv2
+import time
+start_pascal = time.time()
+
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('asset/dataset/mix/'):
+for dirname, subdirs, filenames in os.walk('asset/dataset/DS_FIX/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
     else:
       xml_names.append(filename)
 
-print(" Total files")
-print(len(img_names), "images")
-print(len(xml_names), "xml files")
+print("Total Files")
+print("Images    :",len(img_names))
+print("Xml Files :",len(xml_names))
+print()
 
 ## Preprocessing step 2 - cropped images by bounding box using xml files 
 import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
-import cv2
-import numpy as np
-from skimage import filters, feature
-from skimage import exposure
-from matplotlib import pyplot as plt
-from skimage.filters import sobel
 
-path_annotations = "asset/dataset/mix/"
-path_images = "asset/dataset/mix/"
-
-class_names = ['bengal','persian','siamese','ragdoll','rblue']
+path_annotations = "asset/dataset/DS_FIX/"
+path_images = "asset/dataset/DS_FIX/"
+# 'bengal','persian','siamese','ragdoll','rblue','sphynx'
+class_names = ['bengal','ragdoll','siamese','rblue']
 images = []
 target = []
+gmb = []
+cim= []
+
+# 'bengal','siamese','ragdoll' 0.78
+
 
 def crop_bounding_box(img, bnd):
   x1, x2, y1, y2 = list(map(int, bnd.values()))
@@ -51,236 +53,376 @@ for img_name in img_names:
       if temp[i]["name"] not in class_names:
         continue
       images.append(crop_bounding_box(img, temp[i]["bndbox"]))
+      cim.append(crop_bounding_box(img, temp[i]["bndbox"]))
+      gmb.append(img)
       target.append(temp[i]["name"])
   else:
     if temp["name"] not in class_names:
         continue
     images.append(crop_bounding_box(img, temp["bndbox"]))
+    cim.append(crop_bounding_box(img, temp["bndbox"]))
+    gmb.append(img)
     target.append(temp["name"])
 
 # print total target by class
-print("# Total target by class")
+print("Total target by class")
 for i in class_names:
-  print(i, ":", target.count(i))
+  print(i , "   :", target.count(i))
 
+# --------------------------------------------------------------------
+end_pascal = time.time()
+pascalex = end_pascal - start_pascal
+print("Execution time Read Pascal : {} seconds".format(pascalex) ,"\n" )
 
+# --------------------------------------------------------------------
+
+start_prepo = time.time()
 ## Preprocessing step 3 - resize images to 258x258 and normalize (remove background and grayscale)
 import numpy as np
+import skimage
 from skimage.transform import resize
+
 from scipy import ndimage
 from skimage import io, color, exposure, filters
 
-def resize_image(img, size=258):
+def resize_image(img, size = 32):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
 
-def prepo(img):
+def remove_background(img):
   _img = img.copy()
-
-  # Apply Adaptive Histogram Equalization (AHE) to the grayscale image
-  clahe_image = exposure.equalize_adapthist(_img , clip_limit=0.02)
-
-  # Apply Unsharp Masking to the AHE result
-  blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
-  unsharp_mask = clahe_image - 0.7 * blurred
-
-  # Perform segmentation using Thresholding
-  threshold_value = filters.threshold_otsu(unsharp_mask)
-  binary_image = unsharp_mask > threshold_value
-
-  # Convert the binary image to uint8 and scale it to 0-255
-  binary_image = np.uint8(binary_image) * 255
-  return _img  
+  thresh = skimage.filters.threshold_otsu(_img)
+  _img = (_img > thresh).astype(np.float32)
+  return _img
 
 def grayscale(img):
   _img = img.copy()
   _img = np.dot(_img[...,:3], [0.299, 0.587, 0.114])
   return _img
 
+def prepo(img):
+  _img = img.copy()
+
+  # Apply Adaptive Histogram Equalization (AHE) to the grayscale image
+  clahe_image = exposure.equalize_adapthist(_img , clip_limit=3)
+
+  # Apply Unsharp Masking to the AHE result
+  blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
+  unsharp_mask = clahe_image - 0.5 * blurred
+
+  # Perform segmentation using Thresholding
+  threshold_value = filters.threshold_otsu(unsharp_mask)
+  binary_image = unsharp_mask > threshold_value
+
+  # Convert the binary image to uint8 and scale it to 0-255
+  binary_image = binary_image.astype(np.float32)
+  return _img  
+
+
 for i in range(len(images)):
   images[i] = resize_image(images[i])
   images[i] = grayscale(images[i])
   images[i] = prepo(images[i])
+  # images[i] = remove_background(images[i])
 
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
 from PIL import Image
 from scipy.ndimage import convolve
-import numpy as np
-from scipy.ndimage import sobel
 
-def calculate_hog(img, cell_size=(8, 8), block_size=(2, 2), nbins=9):
-    def calculate_gradient(img):
-        sobel_x = sobel(img, axis=1)
-        sobel_y = sobel(img, axis=0)
-        mag = np.sqrt(sobel_x**2 + sobel_y**2)
-        ang = np.arctan2(sobel_y, sobel_x) * (180 / np.pi)
-        return mag, ang
+def phog(img, bin_size=16, levels=3):
+    # Compute the gradient magnitude and orientation
+    gx = convolve(img, [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+    gy = convolve(img, [[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
+    magnitude = np.sqrt(gx**2 + gy**2)
+    orientation = np.arctan2(gy, gx) * 180 / np.pi
 
-    def calculate_histogram(ang, mag, nbins):
-        hist = np.zeros(nbins)
-        bin_width = 180.0 / nbins
-        flattened_ang = ang.flatten()
-        flattened_mag = mag.flatten()
-        for i in range(len(flattened_ang)):
-            bin_index = int(flattened_ang[i] / bin_width)
-            if bin_index == nbins:  # Handle the case when the angle is exactly 180 degrees
-                bin_index = 0
-            hist[bin_index] += flattened_mag[i]
-        return hist
+    # Binning
+    # ---------------------------------------------------------------------------
+    # The gradient orientation is divided into bin_size bins using integer division
+    binned_orientation = (orientation / bin_size).astype(np.int32) % bin_size
 
-    # Step 1: Calculate gradient image
-    mag, ang = calculate_gradient(img)
+    # Pyramidal representation
+    # ---------------------------------------------------------------------------
+    # downsampling the image using the pyrDown function and computing the histograms of
+    # oriented gradients for each level. The histograms are stored in a list pyramid.
+    pyramid = []
+    def pyr_down(img, bin_size=8):
+        # Define the downsampling kernel
 
-    # Step 2: Divide image into cells
-    num_cells_y = img.shape[0] // cell_size[0]
-    num_cells_x = img.shape[1] // cell_size[1]
-    cells = []
-    for i in range(num_cells_y):
-        for j in range(num_cells_x):
-            cell_mag = mag[i*cell_size[0]:(i+1)*cell_size[0], j*cell_size[1]:(j+1)*cell_size[1]]
-            cell_ang = ang[i*cell_size[0]:(i+1)*cell_size[0], j*cell_size[1]:(j+1)*cell_size[1]]
-            cells.append((cell_mag, cell_ang))
+        # The values in the 5x5 array are chosen based on the Gaussian function, which is a symmetric bell-
+        # shaped curve that has a peak at the center and falls off symmetrically in both directions.
+        kernel = np.array([[1, 4, 6, 4, 1],
+                           [4, 16, 24, 16, 4],
+                           [6, 24, 36, 24, 6],
+                           [4, 16, 24, 16, 4],
+                           [1, 4, 6, 4, 1]])
 
-    # Step 3: Calculate histogram for each cell
-    cell_hists = []
-    for cell_mag, cell_ang in cells:
-        cell_hist = calculate_histogram(cell_ang, cell_mag, nbins)
-        cell_hists.append(cell_hist)
+        # Normalize the kernel based on the factor
+        kernel = 1.0/bin_size * kernel
 
-    # Step 4: Divide cells into blocks and concatenate histograms
-    blocks = []
-    block_size_cells_y = block_size[0]
-    block_size_cells_x = block_size[1]
-    for i in range(num_cells_y - block_size_cells_y + 1):
-        for j in range(num_cells_x - block_size_cells_x + 1):
-            block_hist = np.concatenate([
-                cell_hists[(i+k)*num_cells_x + j+l]
-                for k in range(block_size_cells_y)
-                for l in range(block_size_cells_x)
-            ])
-            blocks.append(block_hist)
+        # Convolve the image with the kernel
 
-    # Step 5: Normalize blocks using L2-norm
-    blocks = np.array(blocks)
-    block_norm = np.sqrt(np.sum(blocks**2, axis=1)) + 1e-6  # Add small epsilon to avoid division by zero
-    blocks /= block_norm[:, np.newaxis]
+        #  mode = 'constant' means that the values of the image at the edges
+        #  are assumed to be a constant value, which is typically set to 0.
+        convolved = convolve(img, kernel, mode='constant')
 
-    # Step 6: Concatenate normalized blocks into HOG descriptor
-    hog_descriptor = blocks.flatten()
+        # Downsample the image by taking every other row and column
+        downsampled = convolved[::2, ::2]
 
-    return hog_descriptor
-    
+        return downsampled
+
+
+    for i in range(levels):
+        histograms = np.zeros((bin_size,))
+        for y in range(img.shape[0]):
+            for x in range(img.shape[1]):
+                histograms[binned_orientation[y, x]] += magnitude[y, x]
+        pyramid.append(histograms)
+        img = pyr_down(img)
+
+    # Step 5: Normalization
+    # ---------------------------------------------------------------------------
+
+    normalized_pyramid = []
+    for histograms in pyramid:
+        normalization_factor = np.sum(histograms**2)**0.5
+        if normalization_factor > 1e-12:
+            histograms /= normalization_factor
+        normalized_pyramid.append(histograms)
+
+    # Step 6: Concatenation
+    # ---------------------------------------------------------------------------
+
+    phog_descriptor = np.concatenate(normalized_pyramid)
+
+    # Step 7: Representation (linear vector)
+    # ---------------------------------------------------------------------------
+
+    return phog_descriptor
 
 features = []
 for i in range(len(images)):
-  print("Processing item", i+1, "of ",len(images),"...")
-  features.append(calculate_hog(images[i]))
+  print("Processing", i+1, "of",len(images))
+  features.append(phog(images[i]))
 
-print(features[0])
+# --------------------------------------------------------------------
+end_prepo = time.time()
+prepotime = end_prepo - start_prepo
+print()
+print("Execution time Prepp : {} seconds".format(prepotime))
+# --------------------------------------------------------------------
 
+start_split = time.time()
 from sklearn.model_selection import train_test_split
 
 X, y = features, np.array(target)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+print()
+print("Training Data :\n", np.asarray(np.unique(y_train, return_counts=True)).T)
+print("Test Data     :\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 
-print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
-print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
+end_split = time.time()
+splittime = end_split - start_split
+print()
+print("Execution Time Split Data : {} seconds".format(splittime))
 
-## Classification step 1
-
-
-# # ------------------------------------------------------
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import StackingClassifier
-from sklearn.linear_model import LogisticRegression
-
-clf = StackingClassifier(
-    estimators=[('svm', SVC(random_state=42)),
-                ('tree', DecisionTreeClassifier(random_state=42))],
-    final_estimator=LogisticRegression(random_state=42),
-    n_jobs=-1)
-
-from sklearn.model_selection import GridSearchCV
-
-param_grid = {
-    'svm__C': [1.6, 1.7, 1.8],
-    'svm__kernel': ['rbf'],
-    'tree__criterion': ['entropy'],
-    'tree__max_depth': [9, 10, 11],
-    'final_estimator__C': [1.3, 1.4, 1.5]
-}
-
-grid = GridSearchCV(
-    estimator=clf,
-    param_grid=param_grid,
-    scoring='accuracy',
-    n_jobs=-1)
-
-grid.fit(X_train, y_train)
-
-print('Best parameters: %s' % grid.best_params_)
-print('Accuracy: %.2f' % grid.best_score_)
-# # ------------------------------------------------------
-
+# Classification step 1
+# ------------------------------------------------------
+# !             TEST TUNING CLASSIFIER
+# ------------------------------------------------------
 # from sklearn.svm import SVC
 # from sklearn.tree import DecisionTreeClassifier
 # from sklearn.ensemble import StackingClassifier
 # from sklearn.linear_model import LogisticRegression
-# from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+# from sklearn.model_selection import GridSearchCV
 
-# final_clf = StackingClassifier(
-#     estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42)),
-#                 ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))],
-#     final_estimator=LogisticRegression(C=1.5, random_state=42),
+# clf = StackingClassifier(
+#     estimators=[('svm', SVC(random_state=42)),
+#                 ('tree', DecisionTreeClassifier(random_state=42))],
+#     final_estimator=LogisticRegression(random_state=42),
 #     n_jobs=-1)
 
-# final_clf.fit(X_train, y_train)
-# y_pred = final_clf.predict(X_test)
+# param_grid = {
+#     'svm__C': [1.6, 1.7, 1.8],
+#     'svm__kernel': ['rbf','linear'],
+#     'tree__criterion': ['entropy','gini'],
+#     'tree__max_depth': [9, 10, 11],
+#     'final_estimator__C': [1.3, 1.4, 1.5]
+# }
 
-# print('Accuracy score : ', accuracy_score(y_test, y_pred))
-# print('Precision score : ', precision_score(y_test, y_pred, average='weighted'))
-# print('Recall score : ', recall_score(y_test, y_pred, average='weighted'))
-# print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
+# grid = GridSearchCV(
+#     estimator=clf,
+#     param_grid=param_grid,
+#     scoring='accuracy',
+#     n_jobs=-1)
+
+# grid.fit(X_train, y_train)
+
+# print('Best parameters: %s' % grid.best_params_)
+# print('Accuracy       : %.2f' % grid.best_score_)
 
 
-# Save SVM Model
 
+# ------------------------------------------------------
+
+# # # ------------------------------------------------------
+# # #!             RUN CLASSIFIER
+# # # ------------------------------------------------------
+start_class = time.time()
+from sklearn.svm import SVC,LinearSVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import StackingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# final_clf = LinearSVC(multi_class='crammer_singer', dual=False)
+final_clf = StackingClassifier(
+    estimators=[
+       ('svm', SVC(C=1.6, kernel='rbf', random_state=42)),
+       ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))        
+                ],
+    final_estimator=LogisticRegression(C=1.3, random_state=42),
+    n_jobs=-1)
+
+final_clf.fit(X_train, y_train)
+y_pred = final_clf.predict(X_test)
+
+print()
+print('Accuracy score   : ', accuracy_score(y_test, y_pred))
+print('Precision score  : ', precision_score(y_test, y_pred, average='weighted'))
+print('Recall score     : ', recall_score(y_test, y_pred, average='weighted'))
+print('F1 score         : ', f1_score(y_test, y_pred, average='weighted'))
+end_class = time.time()
+classtime = end_class - start_class
+print()
+print("Execution time Classifier : {} seconds".format(classtime))
+
+# ------------------------------------------------------
+#!               SAVE CLASSIFIER MODEL
+# ------------------------------------------------------
 # import pickle
-
 # pkl_filename = 'svm_model.pkl'
 # with open(pkl_filename, 'wb') as file:
 #   pickle.dump(final_clf, file)
 
-# # create confusion matrix
 
-# from sklearn.metrics import confusion_matrix
-
-# cm = confusion_matrix(y_test, y_pred, labels=['bengal', 'persian', 'ragdoll', 'rblue', 'siamese'])
-
-# # print confusion matrix
-
+# # ------------------------------------------------------
+# #?             CONFUSSION MATRIX
+# # ------------------------------------------------------
 # import matplotlib.pyplot as plt
 # from sklearn.metrics import ConfusionMatrixDisplay
+# from sklearn.metrics import classification_report
+# # print("Predicting cat breed on the test set")
+# print()
+# print(classification_report(y_test, 
+#                             y_pred, 
+#                             target_names=class_names
+#                             ))
+# # ConfusionMatrixDisplay.from_estimator(
+# #     final_clf, 
+# #     X_test, 
+# #     y_test,
+# #     display_labels=class_names, 
+# #     xticks_rotation="vertical" #,cmap=plt.cm.Blues
+# # )
+# # plt.tight_layout()
+# # plt.show()
 
-# # Plot non-normalized confusion matrix
-# titles_options = [
-   
-#     ("Confusion matrix, without normalization", None),
+# # from skimage.io import imshow,show
+# # import random
+
+# # fig, axs = plt.subplots(1, 3)
+
+# # # Display the first image
+# # axs[0].imshow(images[50])
+# # axs[0].axis('off')
+
+# # # Display the second image
+# # axs[1].imshow(imaget[50])
+# # axs[1].axis('off')
+
+# # axs[2].text(0.5, 0.5, str(features[50]), fontsize=12, ha='center')
+# # axs[2].axis('off')
+
+# # # Show the plot
+# # plt.show()
+
+# import pickle
+
+# pkl_filename = 'svm_model.pkl'
+# with open(pkl_filename, 'rb') as file:
+#     loaded_model = pickle.load(file)
+
+# from skimage.io import imshow,show
+# import random
+# rnd = random.randint(1, len(features))
+# print()
+# print('RAND DATA :',rnd )
+# # imshow(images[rnd])
+# # show()
+
+# pdt = features[rnd]
+# print('Len of Features : ', len(features))
+# prediction = loaded_model.predict([pdt])
+# print("Real :", target[rnd])
+# print("Prediction :", prediction)
+
+# # Create a figure and axes
+# fig, axes = plt.subplots(1, 4, figsize=(10, 5))
+
+# # Display the first image
+# axes[1].imshow(images[rnd])
+# axes[1].set_title('Cropped ')
+
+# # Display the second image
+# axes[2].imshow(cim[rnd])
+# axes[2].set_title('Cropped Original')
+
+# axes[3].imshow(gmb[rnd])
+# axes[3].set_title('Original')
+
+# cmd = ConfusionMatrixDisplay.from_estimator(
+#     final_clf, 
+#     X_test, 
+#     y_test,
+#     display_labels=class_names, 
     
-# ]
-# for title, normalize in titles_options:
-#     disp = ConfusionMatrixDisplay.from_estimator(
-#         final_clf,
-#         X_test,
-#         y_test,
-#         display_labels=class_names,
-#         cmap=plt.cm.Blues,
-#     )
-#     disp.ax_.set_title(title)
+# )
+# cmd.plot(ax=axes[0],xticks_rotation="vertical" )
 
-#     print(title)
-#     print(disp.confusion_matrix)
+# # Adjust the layout
 
+# # Show the plot
+# plt.tight_layout()
 # plt.show()
+
+# Total target by class
+# bengal      : 395 + 6   V
+# ragdoll     : 324 + 82  V
+# siamese     : 255 + 165 V
+# rblue       : 389 + 11
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import svm
+
+
+# Menentukan batas plot
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                     np.arange(y_min, y_max, 0.01))
+
+# Memprediksi kelas untuk setiap titik dalam grid
+Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+
+# Memvisualisasikan pemisahan linear
+plt.contourf(xx, yy, Z, alpha=0.8)
+plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k')
+plt.xlabel('Fitur 1')
+plt.ylabel('Fitur 2')
+plt.title('Pemisahan Linear dengan SVM')
+plt.show()
+

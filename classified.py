@@ -1,17 +1,10 @@
-import numpy as np
-from skimage.io import imread
-import skimage
-from skimage.transform import resize
-from scipy.ndimage import convolve
-from PIL import Image
-import pickle
 
 # Load the trained model
 pkl_filename = 'svm_model.pkl'
 with open(pkl_filename, 'rb') as file:
     final_clf = pickle.load(file)
 
-class_names = ['bengal', 'persian', 'ragdoll', 'rblue', 'siamese']
+class_names = ['bengal']
 
 # Load and preprocess the single image
 image_path = 'asset/dataset/mix/Siamese_29_jpg.rf.59026415dfafd96375c8fccc8d9c32a3.jpg'  # Replace with the path to your image
@@ -49,14 +42,7 @@ img_resized = resize_image(img_cropped)
 img_grayscale = grayscale(img_resized)
 img_normalized = remove_background(img_grayscale)
 
-# Feature Extraction - PHOG
-def compute_hog(img, bin_size=16):
-    # Compute the gradient magnitude and orientation
-    gx = convolve(img, [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-    gy = convolve(img, [[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
-    magnitude = np.sqrt(gx**2 + gy**2)
-    orientation = np.arctan2(gy, gx) * 180 / np.pi
-
+# Featur
     # Binning
     binned_orientation = (orientation / bin_size).astype(np.int32) % bin_size
 

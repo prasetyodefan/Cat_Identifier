@@ -1,31 +1,39 @@
 ## Preprocessing step 1 - filtered images and xml files
 import os
+import time
+start_pascal = time.time()
 
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('asset/dataset/bblue/'):
+for dirname, subdirs, filenames in os.walk('asset/dataset/DS_FIX/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
     else:
       xml_names.append(filename)
 
-print(" Total files")
-print(len(img_names), "images")
-print(len(xml_names), "xml files")
+print("Total Files")
+print("Images    :",len(img_names))
+print("Xml Files :",len(xml_names))
+print()
 
 ## Preprocessing step 2 - cropped images by bounding box using xml files 
 import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread
 
-path_annotations = "asset/dataset/bblue/"
-path_images = "asset/dataset/bblue/"
-
-class_names = ['bengal','persian','rblue','siamese','ragdoll']
+path_annotations = "asset/dataset/DS_FIX/"
+path_images = "asset/dataset/DS_FIX/"
+# 'bengal','persian','siamese','ragdoll','rblue','sphynx'
+class_names = ['bengal','ragdoll','siamese','rblue']
 images = []
 target = []
+gmb = []
+cim= []
+
+# 'bengal','siamese','ragdoll' 0.78
+
 
 def crop_bounding_box(img, bnd):
   x1, x2, y1, y2 = list(map(int, bnd.values()))
@@ -45,25 +53,40 @@ for img_name in img_names:
       if temp[i]["name"] not in class_names:
         continue
       images.append(crop_bounding_box(img, temp[i]["bndbox"]))
+      cim.append(crop_bounding_box(img, temp[i]["bndbox"]))
+      gmb.append(img)
       target.append(temp[i]["name"])
   else:
     if temp["name"] not in class_names:
         continue
     images.append(crop_bounding_box(img, temp["bndbox"]))
+    cim.append(crop_bounding_box(img, temp["bndbox"]))
+    gmb.append(img)
     target.append(temp["name"])
 
 # print total target by class
-print("# Total target by class")
+print("Total target by class")
 for i in class_names:
-  print(i, ":", target.count(i))
+  print(i , "   :", target.count(i))
 
+# --------------------------------------------------------------------
+end_pascal = time.time()
+pascalex = end_pascal - start_pascal
+print("Execution time Read Pascal : {} seconds".format(pascalex) ,"\n" )
 
+# --------------------------------------------------------------------
+
+start_prepo = time.time()
 ## Preprocessing step 3 - resize images to 258x258 and normalize (remove background and grayscale)
 import numpy as np
 import skimage
 from skimage.transform import resize
 
-def resize_image(img, size=128):
+from scipy import ndimage
+from skimage import io, color, exposure, filters
+from skimage.filters import unsharp_mask
+
+def resize_image(img, size = 32):
   _img = img.copy() 
   _img = resize(_img, (size, size))
   return _img
@@ -79,10 +102,30 @@ def grayscale(img):
   _img = np.dot(_img[...,:3], [0.299, 0.587, 0.114])
   return _img
 
+def prepo(img):
+  _img = img.copy()
+
+  # Apply Adaptive Histogram Equalization (AHE) to the grayscale image
+  clahe_image = exposure.equalize_adapthist(_img , clip_limit=3)
+
+  # Apply Unsharp Masking to the AHE result
+  blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
+  unsharp_maskk = clahe_image - 0.5 * blurred
+
+  # Perform segmentation using Thresholding
+  threshold_value = unsharp_mask(unsharp_maskk, radius=5, amount=2)
+  binary_image = unsharp_maskk > threshold_value
+
+  # Convert the binary image to uint8 and scale it to 0-255
+  binary_image = binary_image.astype(np.float32)
+  return _img  
+
+
 for i in range(len(images)):
   images[i] = resize_image(images[i])
   images[i] = grayscale(images[i])
-  images[i] = remove_background(images[i])
+  images[i] = prepo(images[i])
+  # images[i] = remove_background(images[i])
 
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
 from PIL import Image
@@ -105,7 +148,7 @@ def phog(img, bin_size=16, levels=3):
     # downsampling the image using the pyrDown function and computing the histograms of
     # oriented gradients for each level. The histograms are stored in a list pyramid.
     pyramid = []
-    def pyr_down(img, bin_size=16):
+    def pyr_down(img, bin_size=8):
         # Define the downsampling kernel
 
         # The values in the 5x5 array are chosen based on the Gaussian function, which is a symmetric bell-
@@ -161,111 +204,45 @@ def phog(img, bin_size=16, levels=3):
 
 features = []
 for i in range(len(images)):
-  print("Processing item", i+1, "of ",len(images),"...")
+  print("Processing", i+1, "of",len(images))
   features.append(phog(images[i]))
 
-# print(features[0])
-
-from sklearn.model_selection import train_test_split
-
-X, y = features, np.array(target)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-print("Training data\n", np.asarray(np.unique(y_train, return_counts=True)).T)
-print("Test data\n", np.asarray(np.unique(y_test, return_counts=True)).T)
-
-## Classification step 1
-
-
-# # # ------------------------------------------------------
-# from sklearn.svm import SVC
-# from sklearn.tree import DecisionTreeClassifier
-# from sklearn.ensemble import StackingClassifier
-# from sklearn.linear_model import LogisticRegression
-
-# clf = StackingClassifier(
-#     estimators=[('svm', SVC(random_state=42)),
-#                 ('tree', DecisionTreeClassifier(random_state=42))],
-#     final_estimator=LogisticRegression(random_state=42),
-#     n_jobs=-1)
-
-# from sklearn.model_selection import GridSearchCV
-
-# param_grid = {
-#     'svm__C': [1.6, 1.7, 1.8],
-#     'svm__kernel': ['rbf'],
-#     'tree__criterion': ['entropy'],
-#     'tree__max_depth': [9, 10, 11],
-#     'final_estimator__C': [1.3, 1.4, 1.5]
-# }
-
-# grid = GridSearchCV(
-#     estimator=clf,
-#     param_grid=param_grid,
-#     scoring='accuracy',
-#     n_jobs=-1)
-
-# grid.fit(X_train, y_train)
-
-# print('Best parameters: %s' % grid.best_params_)
-# print('Accuracy: %.2f' % grid.best_score_)
-# # # ------------------------------------------------------
-
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import StackingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
-final_clf = StackingClassifier(
-    estimators=[('svm', SVC(C=1.8, kernel='rbf', random_state=42)),
-                ('tree', DecisionTreeClassifier(criterion='entropy', max_depth=9, random_state=42))],
-    final_estimator=LogisticRegression(C=1.5, random_state=42),
-    n_jobs=-1)
-
-final_clf.fit(X_train, y_train)
-y_pred = final_clf.predict(X_test)
-
-print('Accuracy score : ', accuracy_score(y_test, y_pred))
-print('Precision score : ', precision_score(y_test, y_pred, average='weighted'))
-print('Recall score : ', recall_score(y_test, y_pred, average='weighted'))
-print('F1 score : ', f1_score(y_test, y_pred, average='weighted'))
-
-
-# Save SVM Model
+# --------------------------------------------------------------------
+end_prepo = time.time()
+prepotime = end_prepo - start_prepo
+print()
+print("Execution time Prepp : {} seconds".format(prepotime))
+# --------------------------------------------------------------------
 
 import pickle
 
 pkl_filename = 'svm_model.pkl'
-with open(pkl_filename, 'wb') as file:
-  pickle.dump(final_clf, file)
+with open(pkl_filename, 'rb') as file:
+    loaded_model = pickle.load(file)
 
-# create confusion matrix
+from skimage.io import imshow,show
+import random
 
-from sklearn.metrics import confusion_matrix
+import csv
 
-cm = confusion_matrix(y_test, y_pred, labels=['bengal','persian','rblue','siamese','ragdoll'])
+leng = len(features)
 
-# print confusion matrix
+# Open a new CSV file in write mode
+with open('data.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
 
-import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
+    for p in range(leng):
+        pdt = features[p]
+        prediction = loaded_model.predict([pdt])
+        data_test = target[p]
+        im_name = img_names[p]
+        # Write the data to the CSV file
+        writer.writerow([p, pdt, data_test, prediction])
 
-# Plot non-normalized confusion matrix
-titles_options = [
-    ("Confusion matrix, without normalization", None),
-]
-for title, normalize in titles_options:
-    disp = ConfusionMatrixDisplay.from_estimator(
-        final_clf,
-        X_test,
-        y_test,
-        display_labels=class_names,
-        cmap=plt.cm.Blues,
-    )
-    disp.ax_.set_title(title)
+print("Data exported to data.csv successfully.")
 
-    print(title)
-    print(disp.confusion_matrix)
-
-plt.show()
+# Total target by class
+# bengal      : 395 + 6   V
+# ragdoll     : 324 + 82  V
+# siamese     : 255 + 165 V
+# rblue       : 389 + 11
