@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>pngtree-siamese-cat-brown-png-image_3912007_jpeg.rf.f8b34139addc4880ac72879f5b9909e9.jpg</filename>
+	<path>pngtree-siamese-cat-brown-png-image_3912007_jpeg.rf.f8b34139addc4880ac72879f5b9909e9.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>1155</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>223</xmin>
+			<xmax>924</xmax>
+			<ymin>129</ymin>
+			<ymax>898</ymax>
+		</bndbox>
+	</object>
+</annotation>

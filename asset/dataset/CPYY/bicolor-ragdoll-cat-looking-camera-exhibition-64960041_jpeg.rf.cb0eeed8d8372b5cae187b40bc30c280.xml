@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>bicolor-ragdoll-cat-looking-camera-exhibition-64960041_jpeg.rf.cb0eeed8d8372b5cae187b40bc30c280.jpg</filename>
+	<path>bicolor-ragdoll-cat-looking-camera-exhibition-64960041_jpeg.rf.cb0eeed8d8372b5cae187b40bc30c280.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>191</xmin>
+			<xmax>716</xmax>
+			<ymin>91</ymin>
+			<ymax>567</ymax>
+		</bndbox>
+	</object>
+</annotation>

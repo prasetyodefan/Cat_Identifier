@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>com_is_image_OrientalTrading_PDP_VIEWER_IMAGE__jpeg.rf.dd5429c362072f43f166e1cc84a545cc.jpg</filename>
+	<path>com_is_image_OrientalTrading_PDP_VIEWER_IMAGE__jpeg.rf.dd5429c362072f43f166e1cc84a545cc.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>825</width>
+		<height>825</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>210</xmin>
+			<xmax>529</xmax>
+			<ymin>92</ymin>
+			<ymax>415</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>close-up-portrait-of-cat-on-grass-france_jpeg.rf.2b02c34d4df7b86732beba62fe49d9dc.jpg</filename>
+	<path>close-up-portrait-of-cat-on-grass-france_jpeg.rf.2b02c34d4df7b86732beba62fe49d9dc.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>612</width>
+		<height>408</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>159</xmin>
+			<xmax>422</xmax>
+			<ymin>1</ymin>
+			<ymax>282</ymax>
+		</bndbox>
+	</object>
+</annotation>

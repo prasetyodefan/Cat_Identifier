@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>stock-photo-angry-cat-portrait-of-an-aggressive-siamese-cat-close-up-2037640709_jpeg.rf.117dc2f4b25d51370240804b0944ccf0.jpg</filename>
+	<path>stock-photo-angry-cat-portrait-of-an-aggressive-siamese-cat-close-up-2037640709_jpeg.rf.117dc2f4b25d51370240804b0944ccf0.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1500</width>
+		<height>1600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>131</xmin>
+			<xmax>1394</xmax>
+			<ymin>101</ymin>
+			<ymax>1396</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>cat-face-color-furry-wallpaper-preview_jpeg.rf.633362d198f4ffb72d9a3bf78372400a.jpg</filename>
+	<path>cat-face-color-furry-wallpaper-preview_jpeg.rf.633362d198f4ffb72d9a3bf78372400a.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>728</width>
+		<height>484</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>182</xmin>
+			<xmax>615</xmax>
+			<ymin>3</ymin>
+			<ymax>424</ymax>
+		</bndbox>
+	</object>
+</annotation>

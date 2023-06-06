@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>dont-let-his-cute-face-fool-you-he-is-plotting-your-downfall-v0-ui3el17fh23b1_jpeg.rf.9be3855f9178dd8897676be1218d7099.jpg</filename>
+	<path>dont-let-his-cute-face-fool-you-he-is-plotting-your-downfall-v0-ui3el17fh23b1_jpeg.rf.9be3855f9178dd8897676be1218d7099.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>853</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>86</xmin>
+			<xmax>601</xmax>
+			<ymin>1</ymin>
+			<ymax>469</ymax>
+		</bndbox>
+	</object>
+</annotation>

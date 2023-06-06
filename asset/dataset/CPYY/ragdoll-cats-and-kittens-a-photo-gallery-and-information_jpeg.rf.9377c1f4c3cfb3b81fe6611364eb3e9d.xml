@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>ragdoll-cats-and-kittens-a-photo-gallery-and-information_jpeg.rf.9377c1f4c3cfb3b81fe6611364eb3e9d.jpg</filename>
+	<path>ragdoll-cats-and-kittens-a-photo-gallery-and-information_jpeg.rf.9377c1f4c3cfb3b81fe6611364eb3e9d.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1200</width>
+		<height>900</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>427</xmin>
+			<xmax>908</xmax>
+			<ymin>117</ymin>
+			<ymax>595</ymax>
+		</bndbox>
+	</object>
+</annotation>

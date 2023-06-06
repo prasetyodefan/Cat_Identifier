@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>close-up-applehead-siamese-cat_Witsawat-S_Shutterstock-768x576_jpeg.rf.ceb80b3202f0695d779e6e51c2527686.jpg</filename>
+	<path>close-up-applehead-siamese-cat_Witsawat-S_Shutterstock-768x576_jpeg.rf.ceb80b3202f0695d779e6e51c2527686.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>768</width>
+		<height>576</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>135</xmin>
+			<xmax>508</xmax>
+			<ymin>13</ymin>
+			<ymax>382</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>ragdoll-kitten-for-sale-cinnamon-bicolor-face_jpeg.rf.8bed28be5cc6be11b2d325761b2fbc11.jpg</filename>
+	<path>ragdoll-kitten-for-sale-cinnamon-bicolor-face_jpeg.rf.8bed28be5cc6be11b2d325761b2fbc11.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>614</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>1</xmin>
+			<xmax>615</xmax>
+			<ymin>32</ymin>
+			<ymax>645</ymax>
+		</bndbox>
+	</object>
+</annotation>

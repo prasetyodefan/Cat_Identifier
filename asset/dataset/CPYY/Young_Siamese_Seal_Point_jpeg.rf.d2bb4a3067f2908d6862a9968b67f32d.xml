@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Young_Siamese_Seal_Point_jpeg.rf.d2bb4a3067f2908d6862a9968b67f32d.jpg</filename>
+	<path>Young_Siamese_Seal_Point_jpeg.rf.d2bb4a3067f2908d6862a9968b67f32d.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1024</width>
+		<height>768</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>315</xmin>
+			<xmax>844</xmax>
+			<ymin>1</ymin>
+			<ymax>567</ymax>
+		</bndbox>
+	</object>
+</annotation>

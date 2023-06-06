@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>com_is_image_JohnLewis__jpeg.rf.c6778ad74c2e7d6b5134532f72d15f02.jpg</filename>
+	<path>com_is_image_JohnLewis__jpeg.rf.c6778ad74c2e7d6b5134532f72d15f02.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1800</width>
+		<height>2400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>644</xmin>
+			<xmax>1441</xmax>
+			<ymin>694</ymin>
+			<ymax>1394</ymax>
+		</bndbox>
+	</object>
+</annotation>

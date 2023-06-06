@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>stock-photo-portrait-of-a-bengal-cat-isolated-on-black-2459877_jpeg.rf.a0e4df273a2dcfd088e6438152b7b966.jpg</filename>
+	<path>stock-photo-portrait-of-a-bengal-cat-isolated-on-black-2459877_jpeg.rf.a0e4df273a2dcfd088e6438152b7b966.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>387</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>bengal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>73</xmin>
+			<xmax>327</xmax>
+			<ymin>36</ymin>
+			<ymax>315</ymax>
+		</bndbox>
+	</object>
+</annotation>

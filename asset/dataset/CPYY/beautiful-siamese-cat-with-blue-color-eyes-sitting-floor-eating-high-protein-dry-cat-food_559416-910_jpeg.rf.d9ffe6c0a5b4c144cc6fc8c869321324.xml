@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>beautiful-siamese-cat-with-blue-color-eyes-sitting-floor-eating-high-protein-dry-cat-food_559416-910_jpeg.rf.d9ffe6c0a5b4c144cc6fc8c869321324.jpg</filename>
+	<path>beautiful-siamese-cat-with-blue-color-eyes-sitting-floor-eating-high-protein-dry-cat-food_559416-910_jpeg.rf.d9ffe6c0a5b4c144cc6fc8c869321324.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>626</width>
+		<height>413</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>80</xmin>
+			<xmax>427</xmax>
+			<ymin>12</ymin>
+			<ymax>360</ymax>
+		</bndbox>
+	</object>
+</annotation>

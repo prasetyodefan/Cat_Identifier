@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Stormy-Snow-Day-1536x1152_jpeg.rf.2da348fafb08c044cd21082970fa75ce.jpg</filename>
+	<path>Stormy-Snow-Day-1536x1152_jpeg.rf.2da348fafb08c044cd21082970fa75ce.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1536</width>
+		<height>1152</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>547</xmin>
+			<xmax>1230</xmax>
+			<ymin>1</ymin>
+			<ymax>602</ymax>
+		</bndbox>
+	</object>
+</annotation>

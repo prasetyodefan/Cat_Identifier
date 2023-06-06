@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Siamese_Cat_Sweatshirt_V1_3_2000x_jpeg.rf.edc40477e061c6c4fcdce4b4ce6cdb23.jpg</filename>
+	<path>Siamese_Cat_Sweatshirt_V1_3_2000x_jpeg.rf.edc40477e061c6c4fcdce4b4ce6cdb23.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1024</width>
+		<height>1024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>252</xmin>
+			<xmax>750</xmax>
+			<ymin>121</ymin>
+			<ymax>717</ymax>
+		</bndbox>
+	</object>
+</annotation>

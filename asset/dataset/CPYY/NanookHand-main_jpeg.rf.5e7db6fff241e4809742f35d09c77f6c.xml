@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>NanookHand-main_jpeg.rf.5e7db6fff241e4809742f35d09c77f6c.jpg</filename>
+	<path>NanookHand-main_jpeg.rf.5e7db6fff241e4809742f35d09c77f6c.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>550</width>
+		<height>550</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>109</xmin>
+			<xmax>435</xmax>
+			<ymin>19</ymin>
+			<ymax>322</ymax>
+		</bndbox>
+	</object>
+</annotation>

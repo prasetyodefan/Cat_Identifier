@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Niobe050905-Siamese_Cat_jpeg.rf.6c61d4b9fd6e7405aa217029f5359870.jpg</filename>
+	<path>Niobe050905-Siamese_Cat_jpeg.rf.6c61d4b9fd6e7405aa217029f5359870.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1191</width>
+		<height>1600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>204</xmin>
+			<xmax>774</xmax>
+			<ymin>16</ymin>
+			<ymax>606</ymax>
+		</bndbox>
+	</object>
+</annotation>

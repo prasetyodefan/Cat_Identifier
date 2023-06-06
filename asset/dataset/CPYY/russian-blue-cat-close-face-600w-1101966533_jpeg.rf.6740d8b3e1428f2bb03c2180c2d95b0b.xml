@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>russian-blue-cat-close-face-600w-1101966533_jpeg.rf.6740d8b3e1428f2bb03c2180c2d95b0b.jpg</filename>
+	<path>russian-blue-cat-close-face-600w-1101966533_jpeg.rf.6740d8b3e1428f2bb03c2180c2d95b0b.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>420</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>175</xmin>
+			<xmax>500</xmax>
+			<ymin>15</ymin>
+			<ymax>390</ymax>
+		</bndbox>
+	</object>
+</annotation>

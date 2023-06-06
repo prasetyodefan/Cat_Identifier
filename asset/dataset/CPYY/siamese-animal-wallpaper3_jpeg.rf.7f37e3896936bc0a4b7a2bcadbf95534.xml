@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>siamese-animal-wallpaper3_jpeg.rf.7f37e3896936bc0a4b7a2bcadbf95534.jpg</filename>
+	<path>siamese-animal-wallpaper3_jpeg.rf.7f37e3896936bc0a4b7a2bcadbf95534.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1600</width>
+		<height>1334</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>445</xmin>
+			<xmax>1425</xmax>
+			<ymin>1</ymin>
+			<ymax>1153</ymax>
+		</bndbox>
+	</object>
+</annotation>

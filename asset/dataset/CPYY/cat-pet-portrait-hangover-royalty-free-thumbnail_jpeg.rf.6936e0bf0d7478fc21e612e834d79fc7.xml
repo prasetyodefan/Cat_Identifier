@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>cat-pet-portrait-hangover-royalty-free-thumbnail_jpeg.rf.6936e0bf0d7478fc21e612e834d79fc7.jpg</filename>
+	<path>cat-pet-portrait-hangover-royalty-free-thumbnail_jpeg.rf.6936e0bf0d7478fc21e612e834d79fc7.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>350</width>
+		<height>525</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>73</xmin>
+			<xmax>230</xmax>
+			<ymin>116</ymin>
+			<ymax>285</ymax>
+		</bndbox>
+	</object>
+</annotation>

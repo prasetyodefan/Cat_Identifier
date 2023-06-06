@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>aam-aaes74044_jpeg.rf.e6d467ef6f8cc8f0520c0b8f24ff3669.jpg</filename>
+	<path>aam-aaes74044_jpeg.rf.e6d467ef6f8cc8f0520c0b8f24ff3669.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1050</width>
+		<height>700</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>bengal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>316</xmin>
+			<xmax>686</xmax>
+			<ymin>92</ymin>
+			<ymax>443</ymax>
+		</bndbox>
+	</object>
+</annotation>

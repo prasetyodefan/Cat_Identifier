@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>cute-163908_1280-1_jpeg.rf.87446bf2706baacf1b420f700096085b.jpg</filename>
+	<path>cute-163908_1280-1_jpeg.rf.87446bf2706baacf1b420f700096085b.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>450</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>36</xmin>
+			<xmax>601</xmax>
+			<ymin>1</ymin>
+			<ymax>451</ymax>
+		</bndbox>
+	</object>
+</annotation>

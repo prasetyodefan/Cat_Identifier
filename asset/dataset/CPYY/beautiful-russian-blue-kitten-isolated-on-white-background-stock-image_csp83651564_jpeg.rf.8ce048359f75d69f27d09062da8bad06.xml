@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>beautiful-russian-blue-kitten-isolated-on-white-background-stock-image_csp83651564_jpeg.rf.8ce048359f75d69f27d09062da8bad06.jpg</filename>
+	<path>beautiful-russian-blue-kitten-isolated-on-white-background-stock-image_csp83651564_jpeg.rf.8ce048359f75d69f27d09062da8bad06.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>360</width>
+		<height>254</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>156</xmin>
+			<xmax>233</xmax>
+			<ymin>18</ymin>
+			<ymax>101</ymax>
+		</bndbox>
+	</object>
+</annotation>

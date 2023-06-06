@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Puck-the-Siamese-cat-with-the-cutest-face-photo-by-Sharon-Miranda_jpeg.rf.dbc230a9dc930491c329a29029e65c2e.jpg</filename>
+	<path>Puck-the-Siamese-cat-with-the-cutest-face-photo-by-Sharon-Miranda_jpeg.rf.dbc230a9dc930491c329a29029e65c2e.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>147</xmin>
+			<xmax>555</xmax>
+			<ymin>121</ymin>
+			<ymax>546</ymax>
+		</bndbox>
+	</object>
+</annotation>

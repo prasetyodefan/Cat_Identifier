@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>fat-ragdoll-cat_Angela-Kotsell-Shutterstock-760x507_jpeg.rf.592c1394b04762a6817317e15020e462.jpg</filename>
+	<path>fat-ragdoll-cat_Angela-Kotsell-Shutterstock-760x507_jpeg.rf.592c1394b04762a6817317e15020e462.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>760</width>
+		<height>507</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>189</xmin>
+			<xmax>358</xmax>
+			<ymin>173</ymin>
+			<ymax>329</ymax>
+		</bndbox>
+	</object>
+</annotation>

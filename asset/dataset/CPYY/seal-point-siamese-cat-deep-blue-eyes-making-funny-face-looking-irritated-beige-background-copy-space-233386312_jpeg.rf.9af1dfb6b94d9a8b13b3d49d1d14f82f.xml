@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>seal-point-siamese-cat-deep-blue-eyes-making-funny-face-looking-irritated-beige-background-copy-space-233386312_jpeg.rf.9af1dfb6b94d9a8b13b3d49d1d14f82f.jpg</filename>
+	<path>seal-point-siamese-cat-deep-blue-eyes-making-funny-face-looking-irritated-beige-background-copy-space-233386312_jpeg.rf.9af1dfb6b94d9a8b13b3d49d1d14f82f.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>534</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>304</xmin>
+			<xmax>594</xmax>
+			<ymin>56</ymin>
+			<ymax>323</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Ollie_Cross_Eyed_Siamese_Featured_jpeg.rf.ac66b6addae05525ed57dfc1a3999881.jpg</filename>
+	<path>Ollie_Cross_Eyed_Siamese_Featured_jpeg.rf.ac66b6addae05525ed57dfc1a3999881.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>760</width>
+		<height>430</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>219</xmin>
+			<xmax>642</xmax>
+			<ymin>1</ymin>
+			<ymax>431</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Cat-Face-Pet-Siamese-Cat-Head-Cat-Eyes-Cat-1288972_jpeg.rf.6276afaff8f95b1e1a15517f89f77bc8.jpg</filename>
+	<path>Cat-Face-Pet-Siamese-Cat-Head-Cat-Eyes-Cat-1288972_jpeg.rf.6276afaff8f95b1e1a15517f89f77bc8.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>269</xmin>
+			<xmax>828</xmax>
+			<ymin>1</ymin>
+			<ymax>566</ymax>
+		</bndbox>
+	</object>
+</annotation>

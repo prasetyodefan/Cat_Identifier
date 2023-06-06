@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>N048343-kw_jpeg.rf.331b746982a4f13a055668a822b5409b.jpg</filename>
+	<path>N048343-kw_jpeg.rf.331b746982a4f13a055668a822b5409b.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>33</xmin>
+			<xmax>507</xmax>
+			<ymin>11</ymin>
+			<ymax>490</ymax>
+		</bndbox>
+	</object>
+</annotation>

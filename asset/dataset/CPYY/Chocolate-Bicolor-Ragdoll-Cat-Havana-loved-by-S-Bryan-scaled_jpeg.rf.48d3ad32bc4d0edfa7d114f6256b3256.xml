@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Chocolate-Bicolor-Ragdoll-Cat-Havana-loved-by-S-Bryan-scaled_jpeg.rf.48d3ad32bc4d0edfa7d114f6256b3256.jpg</filename>
+	<path>Chocolate-Bicolor-Ragdoll-Cat-Havana-loved-by-S-Bryan-scaled_jpeg.rf.48d3ad32bc4d0edfa7d114f6256b3256.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>2560</width>
+		<height>2263</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>828</xmin>
+			<xmax>2264</xmax>
+			<ymin>64</ymin>
+			<ymax>1531</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>horizontal-close-up-photo-face-beautiful-siamese-cat-expressive-blue-eyes-cute-little-cat-lose-long-white-whiskers-129193207_jpeg.rf.ff8a5e4f8174048cae773181823122a9.jpg</filename>
+	<path>horizontal-close-up-photo-face-beautiful-siamese-cat-expressive-blue-eyes-cute-little-cat-lose-long-white-whiskers-129193207_jpeg.rf.ff8a5e4f8174048cae773181823122a9.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1600</width>
+		<height>1157</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>98</xmin>
+			<xmax>1163</xmax>
+			<ymin>1</ymin>
+			<ymax>1039</ymax>
+		</bndbox>
+	</object>
+</annotation>

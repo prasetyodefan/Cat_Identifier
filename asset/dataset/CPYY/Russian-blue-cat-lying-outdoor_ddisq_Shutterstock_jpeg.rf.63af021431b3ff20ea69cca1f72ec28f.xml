@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Russian-blue-cat-lying-outdoor_ddisq_Shutterstock_jpeg.rf.63af021431b3ff20ea69cca1f72ec28f.jpg</filename>
+	<path>Russian-blue-cat-lying-outdoor_ddisq_Shutterstock_jpeg.rf.63af021431b3ff20ea69cca1f72ec28f.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>810</width>
+		<height>581</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>138</xmin>
+			<xmax>379</xmax>
+			<ymin>97</ymin>
+			<ymax>336</ymax>
+		</bndbox>
+	</object>
+</annotation>

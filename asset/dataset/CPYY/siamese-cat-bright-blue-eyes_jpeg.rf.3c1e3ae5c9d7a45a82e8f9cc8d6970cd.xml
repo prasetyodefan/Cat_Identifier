@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>siamese-cat-bright-blue-eyes_jpeg.rf.3c1e3ae5c9d7a45a82e8f9cc8d6970cd.jpg</filename>
+	<path>siamese-cat-bright-blue-eyes_jpeg.rf.3c1e3ae5c9d7a45a82e8f9cc8d6970cd.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>740</width>
+		<height>529</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>119</xmin>
+			<xmax>505</xmax>
+			<ymin>1</ymin>
+			<ymax>399</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Why-Is-My-Siamese-Cats-Face-Turning-White_jpeg.rf.ab80a3d3df5153f72b2303f373d2437c.jpg</filename>
+	<path>Why-Is-My-Siamese-Cats-Face-Turning-White_jpeg.rf.ab80a3d3df5153f72b2303f373d2437c.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>171</xmin>
+			<xmax>487</xmax>
+			<ymin>1</ymin>
+			<ymax>308</ymax>
+		</bndbox>
+	</object>
+</annotation>

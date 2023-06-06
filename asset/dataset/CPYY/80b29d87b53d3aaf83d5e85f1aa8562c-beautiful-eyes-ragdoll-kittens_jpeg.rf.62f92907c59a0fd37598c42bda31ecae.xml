@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>80b29d87b53d3aaf83d5e85f1aa8562c-beautiful-eyes-ragdoll-kittens_jpeg.rf.62f92907c59a0fd37598c42bda31ecae.jpg</filename>
+	<path>80b29d87b53d3aaf83d5e85f1aa8562c-beautiful-eyes-ragdoll-kittens_jpeg.rf.62f92907c59a0fd37598c42bda31ecae.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>410</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>72</xmin>
+			<xmax>407</xmax>
+			<ymin>40</ymin>
+			<ymax>353</ymax>
+		</bndbox>
+	</object>
+</annotation>

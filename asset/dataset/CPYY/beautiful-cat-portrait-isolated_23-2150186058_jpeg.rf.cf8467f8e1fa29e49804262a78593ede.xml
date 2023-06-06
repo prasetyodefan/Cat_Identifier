@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>beautiful-cat-portrait-isolated_23-2150186058_jpeg.rf.cf8467f8e1fa29e49804262a78593ede.jpg</filename>
+	<path>beautiful-cat-portrait-isolated_23-2150186058_jpeg.rf.cf8467f8e1fa29e49804262a78593ede.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>1428</width>
+		<height>2000</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>241</xmin>
+			<xmax>1224</xmax>
+			<ymin>168</ymin>
+			<ymax>1108</ymax>
+		</bndbox>
+	</object>
+</annotation>

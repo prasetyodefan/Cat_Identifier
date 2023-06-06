@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Do-Siamese-Cats-Get-Along-With-Other-Cats_jpeg.rf.385ec82115899552fc0e9699979eae5c.jpg</filename>
+	<path>Do-Siamese-Cats-Get-Along-With-Other-Cats_jpeg.rf.385ec82115899552fc0e9699979eae5c.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>518</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>229</xmin>
+			<xmax>549</xmax>
+			<ymin>19</ymin>
+			<ymax>366</ymax>
+		</bndbox>
+	</object>
+</annotation>

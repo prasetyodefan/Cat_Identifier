@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>351-3511072_why-choose-a-russian-blue-cat-to-be_png.rf.8a8b8898a1fd6e3bf028344e70779485.jpg</filename>
+	<path>351-3511072_why-choose-a-russian-blue-cat-to-be_png.rf.8a8b8898a1fd6e3bf028344e70779485.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>244</width>
+		<height>467</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>34</xmin>
+			<xmax>206</xmax>
+			<ymin>1</ymin>
+			<ymax>167</ymax>
+		</bndbox>
+	</object>
+</annotation>

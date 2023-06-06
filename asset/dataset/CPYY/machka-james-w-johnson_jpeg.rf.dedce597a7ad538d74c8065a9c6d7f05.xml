@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>machka-james-w-johnson_jpeg.rf.dedce597a7ad538d74c8065a9c6d7f05.jpg</filename>
+	<path>machka-james-w-johnson_jpeg.rf.dedce597a7ad538d74c8065a9c6d7f05.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>533</width>
+		<height>400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>120</xmin>
+			<xmax>477</xmax>
+			<ymin>9</ymin>
+			<ymax>356</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>cat-on-white-background_jpeg.rf.1e1eede3f91acb7399e51066853310c7.jpg</filename>
+	<path>cat-on-white-background_jpeg.rf.1e1eede3f91acb7399e51066853310c7.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>612</width>
+		<height>439</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>rblue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>358</xmin>
+			<xmax>510</xmax>
+			<ymin>82</ymin>
+			<ymax>240</ymax>
+		</bndbox>
+	</object>
+</annotation>

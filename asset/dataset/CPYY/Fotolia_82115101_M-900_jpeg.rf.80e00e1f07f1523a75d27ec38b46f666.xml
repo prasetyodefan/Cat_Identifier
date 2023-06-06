@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Fotolia_82115101_M-900_jpeg.rf.80e00e1f07f1523a75d27ec38b46f666.jpg</filename>
+	<path>Fotolia_82115101_M-900_jpeg.rf.80e00e1f07f1523a75d27ec38b46f666.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>900</width>
+		<height>600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>246</xmin>
+			<xmax>850</xmax>
+			<ymin>1</ymin>
+			<ymax>590</ymax>
+		</bndbox>
+	</object>
+</annotation>

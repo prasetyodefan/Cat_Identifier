@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>image_url-https__2F_2Fstatic-onecms-io_2Fwp-content_2Fuploads_2Fsites_2F47_2F2020_2F08_2F01_2Fsiamese-cat-couch_525025708-2000_jpeg.rf.135c20b0f2155217cab8e58ed28df677.jpg</filename>
+	<path>image_url-https__2F_2Fstatic-onecms-io_2Fwp-content_2Fuploads_2Fsites_2F47_2F2020_2F08_2F01_2Fsiamese-cat-couch_525025708-2000_jpeg.rf.135c20b0f2155217cab8e58ed28df677.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>2000</width>
+		<height>1333</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>247</xmin>
+			<xmax>973</xmax>
+			<ymin>29</ymin>
+			<ymax>827</ymax>
+		</bndbox>
+	</object>
+</annotation>

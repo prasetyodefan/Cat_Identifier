@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Canva_-_Siamese_cat_or_seal_brown_cat_with_grey_eyes__sitting_on_a_bed-_jpeg.rf.dde39fb6e505d61abb6da9373e93964b.jpg</filename>
+	<path>Canva_-_Siamese_cat_or_seal_brown_cat_with_grey_eyes__sitting_on_a_bed-_jpeg.rf.dde39fb6e505d61abb6da9373e93964b.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>5472</width>
+		<height>3078</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>siamese</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>2521</xmin>
+			<xmax>4111</xmax>
+			<ymin>346</ymin>
+			<ymax>2066</ymax>
+		</bndbox>
+	</object>
+</annotation>

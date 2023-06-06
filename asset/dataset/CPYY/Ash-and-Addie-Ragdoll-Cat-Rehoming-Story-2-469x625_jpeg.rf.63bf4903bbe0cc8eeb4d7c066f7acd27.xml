@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>Ash-and-Addie-Ragdoll-Cat-Rehoming-Story-2-469x625_jpeg.rf.63bf4903bbe0cc8eeb4d7c066f7acd27.jpg</filename>
+	<path>Ash-and-Addie-Ragdoll-Cat-Rehoming-Story-2-469x625_jpeg.rf.63bf4903bbe0cc8eeb4d7c066f7acd27.jpg</path>
+	<source>
+		<database>roboflow.ai</database>
+	</source>
+	<size>
+		<width>469</width>
+		<height>625</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ragdoll</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>92</xmin>
+			<xmax>419</xmax>
+			<ymin>1</ymin>
+			<ymax>325</ymax>
+		</bndbox>
+	</object>
+</annotation>
