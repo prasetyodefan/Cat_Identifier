@@ -6,7 +6,7 @@ start_pascal = time.time()
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('assets/Predict/persian/'):
+for dirname, subdirs, filenames in os.walk('assets/Predict/bengal/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
@@ -21,17 +21,19 @@ print()
 ## Preprocessing step 2 - cropped images by bounding box using xml files 
 import xmltodict
 from matplotlib import pyplot as plt
-from skimage.io import imread
+from skimage.io import imread, imsave
 
-path_annotations = "assets/Predict/persian/"
-path_images = "assets/Predict/persian/"
-# 'bengal','','siamese','rblue','ragdoll'
+path_annotations = "assets/Predict/bengal/"
+path_images = "assets/Predict/bengal/"
+# '','','','',''
 class_names = ['bengal','persian','siamese','rblue','ragdoll']
 
 images = []
 target = []
 gmb = []
 cim = []
+bnddata = []
+
 
 def crop_bounding_box(img, bnd):
   x1, x2, y1, y2 = list(map(int, bnd.values()))
@@ -52,6 +54,7 @@ for img_name in img_names:
     for i in range(len(temp)):
       if temp[i]["name"] not in class_names:
         continue
+      bnddata.append(temp[i]["bndbox"])
       images.append(crop_bounding_box(img, temp[i]["bndbox"]))
       cim.append(crop_bounding_box(img, temp[i]["bndbox"]))
       gmb.append(img)
@@ -59,6 +62,7 @@ for img_name in img_names:
   else:
     if temp["name"] not in class_names:
         continue
+    bnddata.append(temp["bndbox"])
     images.append(crop_bounding_box(img, temp["bndbox"]))
     cim.append(crop_bounding_box(img, temp["bndbox"]))
     gmb.append(img)
@@ -178,7 +182,7 @@ print("Execution time Prepp : {} seconds".format(prepotime))
 
 import pickle
 
-pkl_filename = 'svm_model.pkl'
+pkl_filename = 'app/Model/svm_model.pkl'
 with open(pkl_filename, 'rb') as file:
     loaded_model = pickle.load(file)
 
@@ -192,6 +196,7 @@ from openpyxl.utils import get_column_letter
 # Membuat DataFrame
 data = []
 kosong = 0
+
 for p in range(leng):
     pdt = features_2d[p]
     prediction = loaded_model.predict([pdt])
@@ -229,12 +234,81 @@ workbook.save(output_filename)
 print("Data exported to data.xlsx successfully.")
 
 
+
+
+# for i, images in enumerate(images):
+#     filename = f'assets/Pred_Result/ragdoll/ragdollC_{i}.jpg'  # Generate a unique filename for each image
+    
+#     if images.ndim == 2:
+      
+#       # Grayscale image
+#       images = np.expand_dims(images, axis=2) 
+    
+#     imsave(filename, images)
+    
+# for i, cim in enumerate(cim):
+#     filename = f'assets/Pred_Result/ragdoll/ragdollORI_{i}.jpg'  # Generate a unique filename for each image
+    
+#     if cim.ndim == 2:
+#       # Grayscale image
+#       cim = np.expand_dims(cim, axis=2) 
+      
+#     imsave(filename, cim)
+
+
+
+
+
+# ----------------------------------------------------------------
+#?                          OVERLAY                              |
+# ----------------------------------------------------------------
+ovimg = []
+def draw_bounding_box(image, bnddata, prediction, result_image_path):
+    image_array = np.array(image)
+    bndbox = x1, x2, y1, y2 = list(map(int, bnddata.values()))
+
+    reshapebndbox = {
+        'x1': bndbox[0],
+        'x2': bndbox[1],
+        'y1': bndbox[2],
+        'y2': bndbox[3]
+    }
+
+    overlay_image_array = image_array.copy()
+    overlay_image = Image.fromarray(overlay_image_array)
+
+    draw = ImageDraw.Draw(overlay_image)
+    draw.rectangle([(reshapebndbox['x1'], reshapebndbox['y1']), (reshapebndbox['x2'], reshapebndbox['y2'])], outline='red')
+
+    text_position = (reshapebndbox['x1'] + 5, reshapebndbox['y1'] + 5)
+    draw.text(text_position, prediction, fill='red')
+
+    overlay_image.save(result_image_path)
+    ovimg.append(overlay_image)
+
+# Example usage
+images = gmb
+bnddata_list = bnddata
+predictions = loaded_model.predict(features)
+predictions_list = predictions.tolist()
+
+for i, image in enumerate(images):
+    bnddata = bnddata_list[i]
+    prediction = predictions_list[i]
+    result_image_path = f'assets/Pred_Result/Overlay/bengal{i+1}.jpg'  # Generate different names for each result image
+    draw_bounding_box(image, bnddata, prediction, result_image_path)
+
+
+# ----------------------------------------------------------------
+#?                         PREPROCESS                            |
+# ----------------------------------------------------------------
+
 import random
 rnd = random.randint(0, len(features))
 
 pdt = features[rnd]
 im_name = img_names[rnd]
-
+ovimgs = ovimg[rnd]
 predt = loaded_model.predict([pdt])
 prediction = str(predt).strip("['']") 
 
@@ -243,7 +317,6 @@ print('Len of Features : ', len(features))
 print('Name : ', im_name)
 print("Data Test  :", target[rnd])
 print("Prediction :", prediction)
-
 import matplotlib.pyplot as plt
 # Create a figure and axes
 fig, axes = plt.subplots(1, 4, figsize=(10, 5))
@@ -253,15 +326,17 @@ axes[0].set_title('Original')
 
 # Display the second image
 axes[1].imshow(cim[rnd])
-axes[1].set_title('Cropped Original')
+axes[1].set_title('Cropped ')
 
 # Display the first image
 axes[2].imshow(images[rnd])
-axes[2].set_title('Cropped ')
+axes[2].set_title('Resize ')
 
-axes[3].set_title('Predict : ')
-axes[3].text(0.3, 0.5, "Data Test  : " + str(target[rnd]))
-axes[3].text(0.5, 0.3, "Prediction : " + str(prediction))
+axes[3].imshow(ovimgs)
+axes[3].set_title('Predict')
+# axes[3].text(0.5, 1.1, "Data Test  : " + str(target[rnd]), ha='center', va='center')
+# axes[3].text(0.5, 1.05, "Prediction : " + str(prediction), ha='center', va='center')
+
 
 plt.tight_layout()
 plt.show()
