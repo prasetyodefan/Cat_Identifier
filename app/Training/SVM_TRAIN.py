@@ -154,6 +154,11 @@ for i in range(len(images)):
 # Mengubah dimensi fitur menjadi 2D
 features_2d = np.array(features)
 
+# np.set_printoptions(threshold=np.inf)
+
+# print("LBP features for each image:")
+# for i, feature in enumerate(features_2d):
+#     print("Image", i+1, ":", feature)
 e_ext = time.time()
 
 # --------------------------------------------------------------------

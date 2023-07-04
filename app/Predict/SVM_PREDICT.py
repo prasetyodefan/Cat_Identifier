@@ -1,4 +1,7 @@
-## Preprocessing step 1 - filtered images and xml files
+# ----------------------------------------------------------------
+#?                       Read Pascal VOC                         |
+# ----------------------------------------------------------------
+
 import os
 import time
 start_pascal = time.time()
@@ -79,7 +82,9 @@ pascalex = end_pascal - start_pascal
 print("Execution time Read Pascal : {} seconds".format(pascalex) ,"\n" )
 
 # --------------------------------------------------------------------
-
+# ----------------------------------------------------------------
+#?                         PREPROCESS                            |
+# ----------------------------------------------------------------
 start_prepo = time.time()
 ## Preprocessing step 3 - resize images to 258x258 and normalize (remove background and grayscale)
 import numpy as np
@@ -133,8 +138,9 @@ for i in range(len(images)):
 
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
 
-from scipy.ndimage import convolve
-
+# ----------------------------------------------------------------
+#?                      EKSTRAKSI FITUR                          |
+# ----------------------------------------------------------------
 def calculate_lbp(img, radius=3, neighbors=8):
     
     lbp = np.zeros_like(img)
@@ -185,7 +191,9 @@ import pickle
 pkl_filename = 'app/Model/svm_model.pkl'
 with open(pkl_filename, 'rb') as file:
     loaded_model = pickle.load(file)
-
+# ----------------------------------------------------------------
+#?                            PREDICT                            |
+# ----------------------------------------------------------------
 import random
 leng = len(features)
 # Create a DataFrame from your data
@@ -202,11 +210,16 @@ for p in range(leng):
     prediction = loaded_model.predict([pdt])
     data_test = target[p]
     im_name = img_names[p]
-    im_data = gmb[p]
+    # im_data = gmb[p]
+    # imdata = Image.fromarray(im_data)
     prediction_str = str(prediction).strip("['']")
-    data.append([p, im_name, data_test, prediction_str, kosong, im_data])
+    data.append([p, im_name, data_test, prediction_str, kosong])
 
-df = pd.DataFrame(data, columns=['Index', 'Name', 'Data Test', 'Prediction', 'True', 'Image'])
+# ----------------------------------------------------------------
+#?                          WRITE XLSX                           |
+# ----------------------------------------------------------------
+# df = pd.DataFrame(data, columns=['Index', 'Name', 'Data Test', 'Prediction', 'True', 'Image'])
+df = pd.DataFrame(data, columns=['Index', 'Name', 'Data Test', 'Prediction', 'True'])
 
 # Menyimpan DataFrame ke file Excel
 output_filename = 'output.xlsx'
@@ -234,31 +247,6 @@ workbook.save(output_filename)
 print("Data exported to data.xlsx successfully.")
 
 
-
-
-# for i, images in enumerate(images):
-#     filename = f'assets/Pred_Result/ragdoll/ragdollC_{i}.jpg'  # Generate a unique filename for each image
-    
-#     if images.ndim == 2:
-      
-#       # Grayscale image
-#       images = np.expand_dims(images, axis=2) 
-    
-#     imsave(filename, images)
-    
-# for i, cim in enumerate(cim):
-#     filename = f'assets/Pred_Result/ragdoll/ragdollORI_{i}.jpg'  # Generate a unique filename for each image
-    
-#     if cim.ndim == 2:
-#       # Grayscale image
-#       cim = np.expand_dims(cim, axis=2) 
-      
-#     imsave(filename, cim)
-
-
-
-
-
 # ----------------------------------------------------------------
 #?                          OVERLAY                              |
 # ----------------------------------------------------------------
@@ -268,10 +256,12 @@ def draw_bounding_box(image, bnddata, prediction, result_image_path):
     bndbox = x1, x2, y1, y2 = list(map(int, bnddata.values()))
 
     reshapebndbox = {
+      
         'x1': bndbox[0],
         'x2': bndbox[1],
         'y1': bndbox[2],
         'y2': bndbox[3]
+        
     }
 
     overlay_image_array = image_array.copy()
@@ -300,7 +290,7 @@ for i, image in enumerate(images):
 
 
 # ----------------------------------------------------------------
-#?                         PREPROCESS                            |
+#?                          DRAW PLOT                            |
 # ----------------------------------------------------------------
 
 import random
@@ -319,21 +309,16 @@ print("Data Test  :", target[rnd])
 print("Prediction :", prediction)
 import matplotlib.pyplot as plt
 # Create a figure and axes
-fig, axes = plt.subplots(1, 4, figsize=(10, 5))
+fig, axes = plt.subplots(1, 3, figsize=(10, 5))
 
 axes[0].imshow(gmb[rnd])
 axes[0].set_title('Original')
 
-# Display the second image
 axes[1].imshow(cim[rnd])
 axes[1].set_title('Cropped ')
 
-# Display the first image
-axes[2].imshow(images[rnd])
-axes[2].set_title('Resize ')
-
-axes[3].imshow(ovimgs)
-axes[3].set_title('Predict')
+axes[2].imshow(ovimgs)
+axes[2].set_title('Predict')
 # axes[3].text(0.5, 1.1, "Data Test  : " + str(target[rnd]), ha='center', va='center')
 # axes[3].text(0.5, 1.05, "Prediction : " + str(prediction), ha='center', va='center')
 
