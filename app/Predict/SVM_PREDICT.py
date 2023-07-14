@@ -9,7 +9,7 @@ start_pascal = time.time()
 img_names = []
 xml_names = []
 
-for dirname, subdirs, filenames in os.walk('assets/Predict/bengal/'):
+for dirname, subdirs, filenames in os.walk('assets/Predict/np/'):
   for filename in filenames:
     if filename[-3:] != "xml":
       img_names.append(filename)
@@ -26,9 +26,8 @@ import xmltodict
 from matplotlib import pyplot as plt
 from skimage.io import imread, imsave
 
-path_annotations = "assets/Predict/bengal/"
-path_images = "assets/Predict/bengal/"
-# '','','','',''
+path_annotations = "assets/Predict/np/"
+path_images = "assets/Predict/np/"
 class_names = ['bengal','persian','siamese','rblue','ragdoll']
 
 images = []
@@ -165,10 +164,11 @@ def calculate_lbp(img, radius=3, neighbors=8):
 #--------------------------------------------------------------------------------
 
 features = []
+lbp1d = []
 for i in range(len(images)):
     print("Processing", i+1, "of", len(images))
     lbp = calculate_lbp(images[i])  # Menghitung LBP untuk gambar
-    
+    lbp1d.append(lbp)
     # Mengubah dimensi LBP menjadi 1D
     lbp_1d = lbp.reshape(-1)
     
@@ -176,8 +176,14 @@ for i in range(len(images)):
 
 # Mengubah dimensi fitur menjadi 2D
 features_2d = np.array(features)
+features_1d = np.array(lbp1d)
 
+np.set_printoptions(threshold=np.inf)
 
+featurearr = []
+
+for i, feature in enumerate(features_1d):
+  featurearr.append(feature)
 
 # --------------------------------------------------------------------
 end_prepo = time.time()
@@ -191,6 +197,7 @@ import pickle
 pkl_filename = 'app/Model/svm_model.pkl'
 with open(pkl_filename, 'rb') as file:
     loaded_model = pickle.load(file)
+    
 # ----------------------------------------------------------------
 #?                            PREDICT                            |
 # ----------------------------------------------------------------
@@ -205,21 +212,23 @@ from openpyxl.utils import get_column_letter
 data = []
 kosong = 0
 
+
 for p in range(leng):
     pdt = features_2d[p]
+    ftr = featurearr[p]
     prediction = loaded_model.predict([pdt])
     data_test = target[p]
     im_name = img_names[p]
     # im_data = gmb[p]
     # imdata = Image.fromarray(im_data)
     prediction_str = str(prediction).strip("['']")
-    data.append([p, im_name, data_test, prediction_str, kosong])
+    data.append([p, im_name, data_test, prediction_str, kosong, ftr])
 
 # ----------------------------------------------------------------
 #?                          WRITE XLSX                           |
 # ----------------------------------------------------------------
 # df = pd.DataFrame(data, columns=['Index', 'Name', 'Data Test', 'Prediction', 'True', 'Image'])
-df = pd.DataFrame(data, columns=['Index', 'Name', 'Data Test', 'Prediction', 'True'])
+df = pd.DataFrame(data, columns=['Index', 'Name', 'Data Test', 'Prediction', 'True', 'LBP'])
 
 # Menyimpan DataFrame ke file Excel
 output_filename = 'output.xlsx'
@@ -238,8 +247,8 @@ for row in range(2, len(df) + 2):
     sheet[cell].value = f'=IF(C{row}=D{row}, 1, 0)'
 
 # Menambahkan rumus '=AVERAGE(E1:E51)' ke sel E5
-cell = 'E52'
-sheet[cell].value = '=AVERAGE(E1:E51)'
+cell = 'E252'
+sheet[cell].value = '=AVERAGE(E1:E251)'
 # Menyimpan workbook dengan rumus ke file Excel
 workbook.save(output_filename)
 
@@ -302,12 +311,20 @@ ovimgs = ovimg[rnd]
 predt = loaded_model.predict([pdt])
 prediction = str(predt).strip("['']") 
 
-
+from sklearn.metrics import classification_report
+from sklearn.metrics import hamming_loss,log_loss,hinge_loss,brier_score_loss
 print('Len of Features : ', len(features))
 print('Name : ', im_name)
 print("Data Test  :", target[rnd])
 print("Prediction :", prediction)
+print(classification_report( target, predictions, target_names=class_names ))
+print("hamming_loss : ",hamming_loss( target, predictions))
+# print("log_loss : ",log_loss( target, predictions))
+# print("hinge_loss : ",hinge_loss( target, predictions))
+# print("brier_score_loss : ",brier_score_loss( target, predictions))
 import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+
 # Create a figure and axes
 fig, axes = plt.subplots(1, 3, figsize=(10, 5))
 
@@ -319,8 +336,6 @@ axes[1].set_title('Cropped ')
 
 axes[2].imshow(ovimgs)
 axes[2].set_title('Predict')
-# axes[3].text(0.5, 1.1, "Data Test  : " + str(target[rnd]), ha='center', va='center')
-# axes[3].text(0.5, 1.05, "Prediction : " + str(prediction), ha='center', va='center')
 
 
 plt.tight_layout()

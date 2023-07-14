@@ -78,6 +78,7 @@ import numpy as np
 from skimage.transform import resize
 
 from scipy import ndimage
+from skimage import data
 from skimage import exposure
 from skimage.filters import unsharp_mask
 
@@ -167,7 +168,7 @@ s_split = time.time()
 from sklearn.model_selection import train_test_split
 
 X, y = features_2d, np.array(target)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, train_size=0.7,random_state=42)
 print()
 print("Training Data :\n", np.asarray(np.unique(y_train, return_counts=True)).T)
 print("Test Data     :\n", np.asarray(np.unique(y_test, return_counts=True)).T)
@@ -206,8 +207,7 @@ with open(pkl_filename, 'wb') as file:
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import ConfusionMatrixDisplay
-from sklearn.metrics import classification_report
-
+from sklearn.metrics import classification_report, hamming_loss
 t_psc = e_psc - s_psc
 t_prep = e_prep - s_prep
 t_split = e_split - s_split
@@ -226,6 +226,7 @@ print('Accuracy                       : {:.2f}'.format(accuracy_score(y_test, y_
 print('Precision                      : {:.2f}'.format(precision_score(y_test, y_pred, average='weighted')))
 print('Recall                         : {:.2f}'.format(recall_score(y_test, y_pred, average='weighted')))
 print('F1                             : {:.2f}'.format(f1_score(y_test, y_pred, average='weighted')))
+print("hamming_loss                   :",hamming_loss( y_test, y_pred))
 print()
 print(classification_report( y_test, y_pred, target_names=class_names ))
 cmd = ConfusionMatrixDisplay.from_estimator( clf, X_test, y_test, display_labels=class_names)
