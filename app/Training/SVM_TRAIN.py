@@ -176,6 +176,31 @@ print("Test Data     :\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 e_split = time.time()
 
 # ----------------------------------------------------------------
+#?                         grid_search                           |
+# ----------------------------------------------------------------
+
+# from sklearn.svm import SVC
+# from sklearn.model_selection import GridSearchCV
+
+# param_grid = {
+#     'C': [0.1, 1, 10, 100, 1000],
+#     'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
+#     'random_state': [42]
+# }
+
+# grid_search = GridSearchCV(SVC(), param_grid, cv=5)
+# grid_search.fit(X_train, y_train)
+
+# cv_results = grid_search.cv_results_
+# for i in range(len(cv_results['params'])):
+#     params = cv_results['params'][i]
+#     accuracy = cv_results['mean_test_score'][i]
+#     print("Model", i+1)
+#     print("Parameters:", params)
+#     print("Accuracy:", accuracy)
+#     print()
+
+# ----------------------------------------------------------------
 #?                         KLASIFIKASI                           |
 # ----------------------------------------------------------------
 

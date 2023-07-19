@@ -326,6 +326,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
 
 # Create a figure and axes
+cmd = ConfusionMatrixDisplay.from_predictions( target, predictions, display_labels=class_names)
 fig, axes = plt.subplots(1, 3, figsize=(10, 5))
 
 axes[0].imshow(gmb[rnd])
