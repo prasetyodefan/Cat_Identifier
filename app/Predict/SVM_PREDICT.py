@@ -85,13 +85,11 @@ print("Execution time Read Pascal : {} seconds".format(pascalex) ,"\n" )
 #?                         PREPROCESS                            |
 # ----------------------------------------------------------------
 start_prepo = time.time()
-## Preprocessing step 3 - resize images to 258x258 and normalize (remove background and grayscale)
 import numpy as np
 import skimage
 from skimage.transform import resize
 
 from scipy import ndimage
-from skimage import io, color, exposure, filters
 from skimage.filters import unsharp_mask
 
 def resize_image(img, size = 32):
@@ -99,26 +97,17 @@ def resize_image(img, size = 32):
   _img = resize(_img, (size, size))
   return _img
 
-def remove_background(img):
-  _img = img.copy()
-  thresh = skimage.filters.threshold_otsu(_img)
-  _img = (_img > thresh).astype(np.float32)
-  return _img
-
 def grayscale(img):
   _img = img.copy()
   _img = np.dot(_img[...,:3], [0.299, 0.587, 0.114])
   return _img
 
-def prepo(img):
+def unsharpmaskk(img):
   _img = img.copy()
-
-  # Apply Adaptive Histogram Equalization (AHE) to the grayscale image
-  clahe_image = exposure.equalize_adapthist(_img , clip_limit=3)
-
-  # Apply Unsharp Masking to the AHE result
-  blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
-  unsharp_maskk = clahe_image - 0.5 * blurred
+  
+  # Apply Unsharp Masking 
+  blurred = ndimage.gaussian_filter(_img, sigma=1)
+  unsharp_maskk = _img - 0.5 * blurred
 
   # Perform segmentation using Thresholding
   threshold_value = unsharp_mask(unsharp_maskk, radius=5, amount=2)
@@ -132,7 +121,7 @@ def prepo(img):
 for i in range(len(images)):
   images[i] = resize_image(images[i])
   images[i] = grayscale(images[i])
-  images[i] = prepo(images[i])
+  images[i] = unsharpmaskk(images[i])
   # images[i] = remove_background(images[i])
 
 ## Extration step 1 - extract features using PHOG (Pyramid Histogram of Oriented Gradients)
@@ -319,7 +308,7 @@ print("Data Test  :", target[rnd])
 print("Prediction :", prediction)
 print(classification_report( target, predictions, target_names=class_names ))
 print("hamming_loss : ",hamming_loss( target, predictions))
-# print("log_loss : ",log_loss( target, predictions))
+#print("log_loss : ",log_loss( target, predictions))
 # print("hinge_loss : ",hinge_loss( target, predictions))
 # print("brier_score_loss : ",brier_score_loss( target, predictions))
 import matplotlib.pyplot as plt

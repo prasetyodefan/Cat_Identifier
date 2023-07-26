@@ -79,7 +79,6 @@ from skimage.transform import resize
 
 from scipy import ndimage
 from skimage import data
-from skimage import exposure
 from skimage.filters import unsharp_mask
 
 def resize_image(img, size = 32):
@@ -89,22 +88,20 @@ def resize_image(img, size = 32):
 
 def grayscale(img):
   _img = img.copy()
-  _img = np.dot(_img[...,:3], [0.299, 0.587, 0.114])
+  _img = np.dot(_img[...,:3], [0.299, 0.587, 0.114]) # fungsi 
   return _img
 
-def prepo(img):
+def unsharpmaskk(img):
   _img = img.copy()
 
-  clahe_image = exposure.equalize_adapthist(_img , clip_limit=3)
-
-  blurred = ndimage.gaussian_filter(clahe_image, sigma=1)
-  unsharp_maskk = clahe_image - 0.5 * blurred
+  blurred = ndimage.gaussian_filter(_img, sigma=1)
+  unsharp_maskk = _img - 0.5 * blurred
 
   threshold_value = unsharp_mask(unsharp_maskk, radius=5, amount=2)
   binary_image = unsharp_maskk > threshold_value
 
   # Convert the binary image to uint8 and scale it to 0-255
-  binary_image = binary_image.astype(np.float32)
+  binary_image = binary_image.astype(np.float32) # BIN to DEC 32 BIT eg 0. instead of 0
   return _img  
 
 
@@ -112,7 +109,7 @@ for i in range(len(images)):
   print("Processing prepo", i+1, "of", len(images))
   images[i] = resize_image(images[i])
   images[i] = grayscale(images[i])
-  images[i] = prepo(images[i])
+  images[i] = unsharpmaskk(images[i])
 
 e_prep = time.time()
 
@@ -122,7 +119,7 @@ e_prep = time.time()
 
 def calculate_lbp(img, radius=3, neighbors=8):
     
-    lbp = np.zeros_like(img)
+    lbp = np.zeros_like(img) #membuat matriks seukuran "img" dengan nilai nol
     
     for i in range(radius, img.shape[0] - radius):
         for j in range(radius, img.shape[1] - radius):
@@ -148,7 +145,7 @@ for i in range(len(images)):
     lbp = calculate_lbp(images[i])  # Menghitung LBP untuk gambar
     
     # Mengubah dimensi LBP menjadi 1D
-    lbp_1d = lbp.reshape(-1)
+    lbp_1d = lbp.reshape(-1) #transpose
     
     features.append(lbp_1d)
 
@@ -176,7 +173,7 @@ print("Test Data     :\n", np.asarray(np.unique(y_test, return_counts=True)).T)
 e_split = time.time()
 
 # ----------------------------------------------------------------
-#?                         grid_search                           |
+#?                         Grid Search                           |
 # ----------------------------------------------------------------
 
 # from sklearn.svm import SVC
@@ -240,17 +237,17 @@ t_ext = e_ext - s_ext
 t_class = e_class - s_class
 
 print()
-print("Execution time Read Pascal VOC : {:.2f} Sec".format(t_psc))
-print("Execution time Preprocces      : {:.2f} Sec".format(t_prep))
-print("Execution time Feature ext     : {:.2f} Sec".format(t_ext))
-print("Execution time Split Data      : {:.2f} Sec".format(t_split))
-print("Execution time Classifier      : {:.2f} Sec".format(t_class))
-print("Total Execution time           : {:.2f} Sec".format(t_split+t_class+t_split+t_ext+t_prep+t_psc))
+print("Execution time Read Pascal VOC : {:.3f} Sec".format(t_psc))
+print("Execution time Preprocces      : {:.3f} Sec".format(t_prep))
+print("Execution time Feature ext     : {:.3f} Sec".format(t_ext))
+print("Execution time Split Data      : {:.3f} Sec".format(t_split))
+print("Execution time Classifier      : {:.3f} Sec".format(t_class))
+print("Total Execution time           : {:.3f} Sec".format(t_split+t_class+t_split+t_ext+t_prep+t_psc))
 print()
-print('Accuracy                       : {:.2f}'.format(accuracy_score(y_test, y_pred)))
-print('Precision                      : {:.2f}'.format(precision_score(y_test, y_pred, average='weighted')))
-print('Recall                         : {:.2f}'.format(recall_score(y_test, y_pred, average='weighted')))
-print('F1                             : {:.2f}'.format(f1_score(y_test, y_pred, average='weighted')))
+print("Accuracy                       :",accuracy_score(y_test, y_pred))
+print("Precision                      :",precision_score(y_test, y_pred, average='weighted'))
+print("Recall                         :",recall_score(y_test, y_pred, average='weighted'))
+print("F1                             :",f1_score(y_test, y_pred, average='weighted'))
 print("hamming_loss                   :",hamming_loss( y_test, y_pred))
 print()
 print(classification_report( y_test, y_pred, target_names=class_names ))
